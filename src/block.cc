@@ -32,7 +32,7 @@ bool Block::changePosition(std::vector<std::pair<int, int>>& newPosition) {
     return true;
 }
 
-std::pair<int, int> getBottomLeft() {
+std::pair<int, int> Block::getBottomLeft() {
     // Coordinates of current bottom left corner of smallest rectangle containing block. 
     //   Constructed using the minimum x and y coordinates out of all the block's cells' coordinates.
     return 

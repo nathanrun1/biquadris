@@ -1,4 +1,5 @@
 #include "block.h"
+#include "board.h"
 #include <algorithm>
 #include <cmath>
 
@@ -7,11 +8,11 @@ bool Block::changePosition(std::vector<std::pair<int, int>>& newPosition) {
 
     // Check validity
     for (std::pair<int, int>& coordinate : newPosition) {
-        if (coordinate.second < 0 || coordinate.second >= grid.size() || coordinate.first < 0 || coordinate.first >= grid[coordinate.second].size()) {
+        if (coordinate.second < 0 || coordinate.second >= board.grid.size() || coordinate.first < 0 || coordinate.first >= board.grid[coordinate.second].size()) {
             // Coordinate out of range, new position is invalid
             return false;
         }
-        if (grid[coordinate.second][coordinate.first].owner != nullptr && grid[coordinate.second][coordinate.first].owner.get() != this) {
+        if (board.grid[coordinate.second][coordinate.first].owner != nullptr && board.grid[coordinate.second][coordinate.first].owner.get() != this) {
             // Cell owned by a different Block, new position is invalid
             return false;
         }
@@ -21,12 +22,12 @@ bool Block::changePosition(std::vector<std::pair<int, int>>& newPosition) {
     
     // Clear previously occupied cells
     for (std::pair<int, int>& coordinate : position) {
-        grid[coordinate.second][coordinate.first].owner.reset();
+        board.grid[coordinate.second][coordinate.first].owner.reset();
     }
 
     // Assign ownership of this Block to newly occupied cells
     for (std::pair<int, int>& coordinate : newPosition) {
-        grid[coordinate.second][coordinate.first].owner = std::shared_ptr<Block>(this);
+        board.grid[coordinate.second][coordinate.first].owner = std::shared_ptr<Block>(this);
     }
 
     return true;
@@ -46,8 +47,8 @@ std::pair<int, int> Block::getBottomLeft() {
     };
 }
 
-Block::Block(std::vector<std::vector<Cell>>& grid, BlockShape* shape, std::pair<int, int> bottomLeftCoordinate, int curLevel, bool& success)
-    : grid(grid), initialLevel(curLevel) {
+Block::Block(Board& board, BlockShape* shape, std::pair<int, int> bottomLeftCoordinate, int curLevel, bool& success)
+    : board(board), initialLevel(curLevel) {
 
     std::vector<std::pair<int, int>> newPosition;
     for (std::pair<int, int> coordinate : shape->getShape()) {
@@ -70,8 +71,9 @@ Block::Block(std::vector<std::vector<Cell>>& grid, BlockShape* shape, std::pair<
 }
 
 Block::~Block() {
+    // Block has been cleared, score points equal to level block was initialized on + 1, squared
     int scored = std::pow(initialLevel + 1, 2);
-    // TODO: Score points for the player equal to 'scored'
+    board.score += scored;
 }
 
 char Block::getColor() { 

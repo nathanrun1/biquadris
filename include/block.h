@@ -5,14 +5,17 @@
 #include "blockshape.h"
 #include "cell.h"
 
+class Board;
+
 class Block {
 
     // *-- IMPORTANT: Do not modify the 'position' field directly, use changePosition --*
     // std::unique_ptr<BlockShape> shape; // Block's inherent shape -- Commented out rn because might not be necessary for Block to store its shape
     char color; // Block's current color
     std::vector<std::pair<int, int>> position = {}; // Block's current position (i.e. the coordinates of all the cells it currently occupies)
-    std::vector<std::vector<Cell>>& grid; // Grid of Cells that this Block exists in
     int initialLevel; // Integer representation of the Level that this Block was initialized in (for scoring purposes)
+
+    Board& board; // Board that this Block exists in
 
     // changePosition(newPosition) attempts to change the block's currently occupied cells to the cells at the coordinates listed in 'newPosition'.
     //   Checks validity by ensuring all cells located at coordinates in 'newPosition' either are empty or owned by this Block. If successful,
@@ -28,7 +31,7 @@ public:
     //   If this initial position is invalid, 'grid' is not modified and 'success' is set to false.
     //   Otherwise, 'success' is set to true, the owners of relevant Cells in 'grid' are set accordingly, and 'success' is set to true.
     //   When this Block is cleared, if the initial position was valid, it will score according to the level it was initialized during, provided by 'curLevel'
-    Block(std::vector<std::vector<Cell>>& grid, BlockShape* shape, std::pair<int, int> bottomLeftCoordinate, int curLevel, bool& success);
+    Block(Board& board, BlockShape* shape, std::pair<int, int> bottomLeftCoordinate, int curLevel, bool& success);
 
     // Block's destructor. This destructor is called whenever this Block is cleared from 'grid', i.e. there are no longer any Cells in 'grid' that have 
     //   this Block as their 'owner'.

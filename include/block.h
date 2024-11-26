@@ -23,7 +23,7 @@ class Block {
     bool changePosition(std::vector<std::pair<int, int>>& newPosition);
 
     // getBottomLeft() returns coordinates (relative to the 'grid') of the bottom left corner of the smallest rectangle containing the block
-    std::pair<int, int> getBottomLeft();
+    std::pair<int, int> getBottomLeft() const;
 public:
 
     // Block(grid, shape, bottomLeftCoordinate, curLevel, success) initializes a Block, existing inside of the provided grid of cells 'grid', with BlockShape 'shape'
@@ -31,14 +31,14 @@ public:
     //   If this initial position is invalid, 'grid' is not modified and 'success' is set to false.
     //   Otherwise, 'success' is set to true, the owners of relevant Cells in 'grid' are set accordingly, and 'success' is set to true.
     //   When this Block is cleared, if the initial position was valid, it will score according to the level it was initialized during, provided by 'curLevel'
-    Block(Board& board, BlockShape* shape, std::pair<int, int> bottomLeftCoordinate, int curLevel, bool& success);
+    Block(Board& board, std::shared_ptr<BlockShape> shape, std::pair<int, int> bottomLeftCoordinate, int curLevel, bool& success);
 
     // Block's destructor. This destructor is called whenever this Block is cleared from 'grid', i.e. there are no longer any Cells in 'grid' that have 
     //   this Block as their 'owner'.
     ~Block();
 
     // -- Getters --
-    char getColor();
+    char getColor() const;
 
     // -- Actions --
     //   The following methods attempt the corresponding action, checking validity (i.e. collisions) using the provided grid of cells 'grid'.

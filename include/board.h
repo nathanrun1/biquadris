@@ -18,11 +18,12 @@ const int BOARD_COLS = 11;
 class Board {
     friend class Block;
     friend class Level;
-protected:
-    std::vector<std::vector<Cell>> grid = std::vector<std::vector<Cell>>(BOARD_ROWS, std::vector<Cell>(BOARD_COLS, Cell(nullptr)));
-    int score; // Current player score
-    Level* level; // Current level
-    std::shared_ptr<Block> fallingBlock; // Current falling block 
+    
+    protected:
+        std::vector<std::vector<Cell>> grid = std::vector<std::vector<Cell>>(BOARD_ROWS, std::vector<Cell>(BOARD_COLS, Cell(nullptr)));
+        int score; // Current player score
+        Level* level; // Current level
+        std::shared_ptr<Block> fallingBlock; // Current falling block 
 
     // spawnBlock(bottomLeftCoordinate) attempts to spawn a Block such that the bottom left corner of the smallest rectangle containing the Block
     //   is located at 'bottomLeftCoordinate', and set this Block as the current falling Block. If successful, returns true. Otherwise, returns false

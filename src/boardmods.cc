@@ -73,6 +73,7 @@ bool BlindBoard::actionDown() {
 }
 void BlindBoard::actionDrop() {
     component->actionDrop();
+    // TODO: Implement such that this modifier removes itself (i.e. replaces itself with its component in the Game, or in whatever class manages the Board)
 }
 
 void BlindBoard::actionRandom() {
@@ -83,5 +84,8 @@ void BlindBoard::actionNoRandom(std::string file) {
 }
 
 char BlindBoard::getColorAt(int x, int y) const {
-    return '?';
+    if (2 <= x && x <= 8 && 6 <= y && y <= 15) { // Rows 2-11 correspond to indices 15-6 (15 is row 2, 6 is row 11)
+        return '?';
+    }
+    else return component->getColorAt(x, y);
 }

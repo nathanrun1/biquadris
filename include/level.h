@@ -6,7 +6,7 @@ class Level {
 public:
     int getLevelNum();
     std::shared_ptr<BlockShape> getNext();
-
+    
 };
 
 #endif

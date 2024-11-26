@@ -27,8 +27,16 @@ protected:
     // spawnBlock(bottomLeftCoordinate) attempts to spawn a Block such that the bottom left corner of the smallest rectangle containing the Block
     //   is located at 'bottomLeftCoordinate', and set this Block as the current falling Block. If successful, returns true. Otherwise, returns false
     //   and has no effect. spawnBlock will fail (i.e. return false) when the desired position to spawn the Block is occupied by another Block.
-    bool spawnBlock(std::pair<int, int> bottomLeftCoordinate);
+    //   If shape provided, spawns the Block using the provided shape. Otherwise, generates a shape from the current Level's getNext() method.
+    bool spawnBlock(std::pair<int, int> bottomLeftCoordinate, std::shared_ptr<BlockShape> shape = nullptr);
+
+    // clearLines() checks if any rows on the grid should be cleared, i.e. all Cells in that row have a non-null 'owner'. If so,
+    //   for each such row, sets nullifies the 'owner' field in each Cell it contains, and "move all above Blocks" down by one.
+    //   Returns total amount of cleared lines.
+    int clearLines();
 public:
+    virtual ~Board();
+
     // -- Action methods (to be implemented by decorators), along with documentation of default effects --
     //   if returns bool, return value represents whether or not action was successful
     virtual bool actionClockwise() = 0; // Rotates falling Block clockwise
@@ -42,9 +50,15 @@ public:
 
     virtual void actionRandom() = 0; // Restores randomness for relevant Levels
     virtual void actionNoRandom(std::string file) = 0; // Makes relevant Levels non-random, taking input from provided file.
+
+    // -- Display methods --
+
+    // getColorAt(x, y) returns the character that should be displayed at the specified (x,y) coordinates.
+    //   Note that x increases to the right, y increases upward (e.g. bottom left corner of grid is (0,0)).
+    virtual char getColorAt(int x, int y) const = 0;
 };
 
-class DefaultBoard : Board {
+class ConcreteBoard : public Board {
 public:
     bool actionClockwise() override; 
     bool actionCounterclockwise() override; 
@@ -57,6 +71,8 @@ public:
 
     void actionRandom() override; 
     void actionNoRandom(std::string file) override;
+
+    char getColorAt(int x, int y) const override;
 };
 
 #endif 

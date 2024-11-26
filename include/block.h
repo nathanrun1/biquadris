@@ -12,7 +12,9 @@ class Block {
     // *-- IMPORTANT: Do not modify the 'position' field directly, use changePosition --*
     // std::unique_ptr<BlockShape> shape; // Block's inherent shape -- Commented out rn because might not be necessary for Block to store its shape
     char color; // Block's current color
-    std::vector<std::pair<int, int>> position = {}; // Block's current position (i.e. the coordinates of all the cells it currently occupies)
+    // Block's current position (i.e. the coordinates of all the cells it currently occupies) when it is the current falling Block.
+    //   -- IMPORTANT: The value of this field is no longer accurate after the Block has been dropped --
+    std::vector<std::pair<int, int>> position = {}; 
     int initialLevel; // Integer representation of the Level that this Block was initialized in (for scoring purposes)
 
     Board& board; // Board that this Block exists in

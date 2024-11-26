@@ -3,16 +3,23 @@
 #include <algorithm>
 #include <cmath>
 
+// yToIndex(y, rows) converts a y coordinate (second value of 2D coordinate) to its index value to use when indexing a Board's grid.
+//   Converts coordinate based on total amount of rows (i.e. height of grid)
+int yToIndex(int y, int rows) {
+    return rows - 1 - y;
+}
+
 bool Block::changePosition(std::vector<std::pair<int, int>>& newPosition) {
     std::shared_ptr<Block> temp(this); // Ensure that this Block is not deleted during ownership transfer
 
     // Check validity
     for (std::pair<int, int>& coordinate : newPosition) {
-        if (coordinate.second < 0 || coordinate.second >= board.grid.size() || coordinate.first < 0 || coordinate.first >= board.grid[coordinate.second].size()) {
+        std::pair<int, int> indexCoordinate(coordinate.first, yToIndex(coordinate.second, board.grid.size()));
+        if (indexCoordinate.second < 0 || indexCoordinate.second >= board.grid.size() || indexCoordinate.first < 0 || indexCoordinate.first >= board.grid[indexCoordinate.second].size()) {
             // Coordinate out of range, new position is invalid
             return false;
         }
-        if (board.grid[coordinate.second][coordinate.first].owner != nullptr && board.grid[coordinate.second][coordinate.first].owner.get() != this) {
+        if (board.grid[indexCoordinate.second][indexCoordinate.first].owner != nullptr && board.grid[indexCoordinate.second][indexCoordinate.first].owner.get() != this) {
             // Cell owned by a different Block, new position is invalid
             return false;
         }
@@ -22,18 +29,18 @@ bool Block::changePosition(std::vector<std::pair<int, int>>& newPosition) {
     
     // Clear previously occupied cells
     for (std::pair<int, int>& coordinate : position) {
-        board.grid[coordinate.second][coordinate.first].owner.reset();
+        board.grid[yToIndex(coordinate.second, board.grid.size())][coordinate.first].owner.reset();
     }
 
     // Assign ownership of this Block to newly occupied cells
     for (std::pair<int, int>& coordinate : newPosition) {
-        board.grid[coordinate.second][coordinate.first].owner = std::shared_ptr<Block>(this);
+        board.grid[yToIndex(coordinate.second, board.grid.size())][coordinate.first].owner = std::shared_ptr<Block>(this);
     }
 
     return true;
 }
 
-std::pair<int, int> Block::getBottomLeft() {
+std::pair<int, int> Block::getBottomLeft() const {
     // Coordinates of current bottom left corner of smallest rectangle containing block. 
     //   Constructed using the minimum x and y coordinates out of all the block's cells' coordinates.
     return 
@@ -47,7 +54,7 @@ std::pair<int, int> Block::getBottomLeft() {
     };
 }
 
-Block::Block(Board& board, BlockShape* shape, std::pair<int, int> bottomLeftCoordinate, int curLevel, bool& success)
+Block::Block(Board& board, std::shared_ptr<BlockShape> shape, std::pair<int, int> bottomLeftCoordinate, int curLevel, bool& success)
     : board(board), initialLevel(curLevel) {
 
     std::vector<std::pair<int, int>> newPosition;
@@ -76,7 +83,7 @@ Block::~Block() {
     board.score += scored;
 }
 
-char Block::getColor() { 
+char Block::getColor() const { 
     // return shape->getColor(); 
     return color;
 }

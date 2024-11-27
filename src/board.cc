@@ -55,10 +55,11 @@ void ConcreteBoard::actionDrop() {
 }
 
 void ConcreteBoard::actionRandom() {
-    // TODO
+    level->setRandom(true);
 }
 void ConcreteBoard::actionNoRandom(std::string file) {
-    // TODO
+    level->setRandom(false);
+    level->setSeqFile(file);
 }
 
 char ConcreteBoard::getColorAt(int x, int y) const {

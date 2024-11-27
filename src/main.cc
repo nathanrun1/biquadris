@@ -1,20 +1,28 @@
-// #include "board.h"
-// #include "block.h"
-// #include "blockshape.cc"
-// #include "cell.h"
-// #include "game.h"
+// #include "../include/board.h"
+#include "../include/game.h"
+// #include ..observer classes...
 
-#include <random>
 #include <iostream>
-#include <chrono>
 
 int main(int argc, char* argv[]) {
-   unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-  std::mt19937 generator (seed);  // mt19937 is a standard mersenne_twister_engine
-  int num = generator() % 100;
-  
-  std::cout << "Random value: " << generator() % 100 << std::endl;
-  
+   // Create the two PLAYER classes as Concrete Boards
+   
+   for (int i = 0; i < argc - 1; i++) {
+      if (argv[i] == "-text") {
+         // Set to ONLY create the graphical observer
+         std::cout << argv[i + 1] << std::endl;
+      } else if (argv[i] == "-seed") {
+         std::cout << argv[i + 1] << std::endl;
+      } else if (argv[i] == "-scriptfile1") {
+         std::cout << argv[i + 1] << std::endl;
+      } else if (argv[i] == "s-criptfile2") {
+         std::cout << argv[i + 1] << std::endl;
+      } else if (argv[i] == "-startlevel") {
+         std::cout << argv[i + 1] << std::endl;
+      }
+   }
 
-   return 0;
+   // Create the GAME Object using Board classes as paramters
+   // Set the observer to the two PLAYER classes
+   // Use Game startGame() function
 }

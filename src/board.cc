@@ -54,8 +54,18 @@ void ConcreteBoard::actionDrop() {
     spawnBlock({0, 14}); 
 }
 
+
+/*
+void ConcreteBoard::action() {
+    std::shared_ptr<BlockShape> block = level->getNext();
+    // Block(Board& board, std::shared_ptr<BlockShape> shape, std::pair<int, int> bottomLeftCoordinate, int curLevel, bool& success);
+    std::shared_ptr<Block> output = std::make_shared<Block>(*this, block, output.getBottomLeft(), block.getLevel(), true); ???
+    fallingBlock = output;
+}
+*/
+
 void ConcreteBoard::actionRandom() {
-    // TODO
+    // TO DO
 }
 void ConcreteBoard::actionNoRandom(std::string file) {
     // TODO

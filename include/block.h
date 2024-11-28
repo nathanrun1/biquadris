@@ -3,7 +3,6 @@
 
 #include <memory>
 #include "blockshape.h"
-#include "cell.h"
 
 class Board;
 

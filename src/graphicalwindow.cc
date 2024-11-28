@@ -1,4 +1,4 @@
-#include "graphicalwindow.h"
+/*#include "graphicalwindow.h"
 #include <stdexcept>
 
 GraphicalWindow::GraphicalWindow(int width, int height) {
@@ -27,3 +27,4 @@ GraphicalWindow::~GraphicalWindow() {
     XDestroyWindow(display, rootWindow);
     XCloseDisplay(display);
 }
+*/

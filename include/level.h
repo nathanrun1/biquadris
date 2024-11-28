@@ -27,7 +27,7 @@ class Level {
         Level(Board& myBoard, std::mt19937& seed, std::string seqFile, bool isRandom);
         virtual ~Level() = default;
 
-        void setSeed(const std::mt19937 new_seed);
+        void setSeed(const std::mt19937 newSeed);
         void setRandom(const bool r);
         void setSeqFile(const std::string fname);
         void incrementCounter();

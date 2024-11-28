@@ -30,7 +30,6 @@ std::shared_ptr<BlockShape> Level::readFromFile() {
 // Level Factory Constructor/Methods -------------------------------------------------------------------------------------------------------
 Level::Level(Board& myBoard, std::mt19937& seed, std::string seqFile, bool isRandom):
     myBoard{myBoard}, turnsLastCleared{0}, seed{seed}, seqFile{seqFile}, fstream{std::ifstream{seqFile}}, isRandom{isRandom} {}
-
 void Level::setSeed(const std::mt19937 new_seed) { seed = new_seed; }
 void Level::setRandom(const bool r)              { isRandom = r; }
 void Level::setSeqFile(const std::string fname)  { seqFile = fname; fstream = std::ifstream{seqFile}; }

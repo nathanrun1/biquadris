@@ -25,46 +25,46 @@ class Block {
 
     // getBottomLeft() returns coordinates (relative to the 'grid') of the bottom left corner of the smallest rectangle containing the block
     std::pair<int, int> getBottomLeft() const;
-public:
 
-    // Block(grid, shape, bottomLeftCoordinate, curLevel, success) initializes a Block, existing inside of the provided grid of cells 'grid', with BlockShape 'shape'
-    //   and initial position such that the bottom left coordinate of the smallest rectangle containing the block is 'bottomLeftCoordinate'.
-    //   If this initial position is invalid, 'grid' is not modified and 'success' is set to false.
-    //   Otherwise, 'success' is set to true, the owners of relevant Cells in 'grid' are set accordingly, and 'success' is set to true.
-    //   When this Block is cleared, if the initial position was valid, it will score according to the level it was initialized during, provided by 'curLevel'
-    Block(Board& board, std::shared_ptr<BlockShape> shape, std::pair<int, int> bottomLeftCoordinate, int curLevel, bool& success);
+    public:
+        // Block(grid, shape, bottomLeftCoordinate, curLevel, success) initializes a Block, existing inside of the provided grid of cells 'grid', with BlockShape 'shape'
+        //   and initial position such that the bottom left coordinate of the smallest rectangle containing the block is 'bottomLeftCoordinate'.
+        //   If this initial position is invalid, 'grid' is not modified and 'success' is set to false.
+        //   Otherwise, 'success' is set to true, the owners of relevant Cells in 'grid' are set accordingly, and 'success' is set to true.
+        //   When this Block is cleared, if the initial position was valid, it will score according to the level it was initialized during, provided by 'curLevel'
+        Block(Board& board, std::shared_ptr<BlockShape> shape, std::pair<int, int> bottomLeftCoordinate, int curLevel, bool& success);
 
-    // Block's destructor. This destructor is called whenever this Block is cleared from 'grid', i.e. there are no longer any Cells in 'grid' that have 
-    //   this Block as their 'owner'.
-    ~Block();
+        // Block's destructor. This destructor is called whenever this Block is cleared from 'grid', i.e. there are no longer any Cells in 'grid' that have 
+        //   this Block as their 'owner'.
+        ~Block();
 
-    // -- Getters --
-    char getColor() const;
+        // -- Getters --
+        char getColor() const;
 
-    // -- Actions --
-    //   The following methods attempt the corresponding action, checking validity (i.e. collisions) using the provided grid of cells 'grid'.
-    //     Each method returns true if the action is successful, or false otherwise. If action unsuccessful, no effect is produced.
-    bool rotateClockwise(); // Rotate block clockwise
-    bool rotateCounterclockwise(); // Rotate block counterclockwise
-    bool left(); // Move block once to the left
-    bool right(); // Move block once to the right
-    bool down(); // Move block once down
+        // -- Actions --
+        //   The following methods attempt the corresponding action, checking validity (i.e. collisions) using the provided grid of cells 'grid'.
+        //     Each method returns true if the action is successful, or false otherwise. If action unsuccessful, no effect is produced.
+        bool rotateClockwise(); // Rotate block clockwise
+        bool rotateCounterclockwise(); // Rotate block counterclockwise
+        bool left(); // Move block once to the left
+        bool right(); // Move block once to the right
+        bool down(); // Move block once down
 
-    // drop() Moves this block down as far as possible until a movement down is no longer valid.
-    void drop();
-    
+        // drop() Moves this block down as far as possible until a movement down is no longer valid.
+        void drop();
+        
 
-    // -- Debugging --
+        // -- Debugging --
 
-    // changeShape(newShape) attempts to change this block's BlockShape to new BlockShape. Preserves the bottom left corner of smallest rectangle containing block.
-    //   Checks validity of this change using the provided grid of cells 'grid'. If change successful returns true, 
-    //   otherwise returns false and has no effect.
-    // bool changeShape(std::unique_ptr<BlockShape> newShape);
+        // changeShape(newShape) attempts to change this block's BlockShape to new BlockShape. Preserves the bottom left corner of smallest rectangle containing block.
+        //   Checks validity of this change using the provided grid of cells 'grid'. If change successful returns true, 
+        //   otherwise returns false and has no effect.
+        // bool changeShape(std::unique_ptr<BlockShape> newShape);
 
-    // changeShape(newShape) attempts to change this block's BlockShape to new BlockShape. Preserves the bottom left corner of smallest rectangle containing block.
-    //   Checks validity of this change using the provided grid of cells 'grid'. If change successful returns true, 
-    //   otherwise returns false and has no effect.
-    bool changeShape(BlockShape* newShape);
+        // changeShape(newShape) attempts to change this block's BlockShape to new BlockShape. Preserves the bottom left corner of smallest rectangle containing block.
+        //   Checks validity of this change using the provided grid of cells 'grid'. If change successful returns true, 
+        //   otherwise returns false and has no effect.
+        bool changeShape(BlockShape* newShape);
 };
 
 #endif

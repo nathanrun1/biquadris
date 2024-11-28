@@ -4,6 +4,7 @@
 #include <map>
 #include <vector>
 
+// Factory Class BlockShape -- Used to define the DEFAULT behavior of a Block
 struct BlockShape {
     // getColor() returns the "color" (i.e. the character) that this block is visually constructed with
     virtual char getColor() const = 0;

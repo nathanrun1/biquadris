@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <cmath>
+#include <iostream>
 #include "block.h"
 #include "board.h"
 #include "cell.h"
@@ -11,15 +12,15 @@
 // }
 
 bool Block::changePosition(std::vector<std::pair<int, int>>& newPosition) {
-    std::shared_ptr<Block> temp(this); // Ensure that this Block is not deleted during ownership transfer
-
+    if (board.getFallingBlock().get() != this) return false; // This block is not the current falling block, no effect
+    std::vector<std::vector<Cell>>& grid = board.getGrid();
     // Check validity
     for (std::pair<int, int>& coordinate : newPosition) {
-        if (coordinate.second < 0 || coordinate.second >= board.grid.size() || coordinate.first < 0 || coordinate.first >= board.grid[coordinate.second].size()) {
+        if (coordinate.second < 0 || coordinate.second >= grid.size() || coordinate.first < 0 || coordinate.first >= grid[coordinate.second].size()) {
             // Coordinate out of range, new position is invalid
             return false;
         }
-        if (board.grid[coordinate.second][coordinate.first].owner != nullptr && board.grid[coordinate.second][coordinate.first].owner.get() != this) {
+        if (grid[coordinate.second][coordinate.first].owner != nullptr && grid[coordinate.second][coordinate.first].owner.get() != this) {
             // Cell owned by a different Block, new position is invalid
             return false;
         }
@@ -29,14 +30,15 @@ bool Block::changePosition(std::vector<std::pair<int, int>>& newPosition) {
     
     // Clear previously occupied cells
     for (std::pair<int, int>& coordinate : position) {
-        board.grid[coordinate.second][coordinate.first].owner.reset();
+        grid[coordinate.second][coordinate.first].owner.reset();
     }
+    
 
     // Assign ownership of this Block to newly occupied cells
     for (std::pair<int, int>& coordinate : newPosition) {
-        board.grid[coordinate.second][coordinate.first].owner = std::shared_ptr<Block>(this);
+        grid[coordinate.second][coordinate.first].owner = std::shared_ptr<Block>(board.getFallingBlock()); // copy board's shared_ptr
     }
-
+    position = newPosition; // Set to new position
     return true;
 }
 
@@ -54,10 +56,39 @@ std::pair<int, int> Block::getBottomLeft() const {
     };
 }
 
-Block::Block(Board& board, std::shared_ptr<BlockShape> shape, std::pair<int, int> bottomLeftCoordinate, int curLevel, bool& success)
-    : board(board), initialLevel(curLevel) {
+Block::Block(Board& board, int curLevel)
+    : initialLevel(curLevel), board(board) {
 
-    std::vector<std::pair<int, int>> newPosition;
+    // std::vector<std::pair<int, int>> newPosition{};
+    // for (std::pair<int, int> coordinate : shape->getShape()) {
+    //     newPosition.emplace_back(
+    //         bottomLeftCoordinate.first + coordinate.first,
+    //         bottomLeftCoordinate.second + coordinate.second
+    //     );
+    // }
+    
+    // if (changePosition(newPosition)) {
+    //     // Initial position is valid
+    //     success = true;
+    //     std::cout << "success" << std::endl;
+    //     color = shape->getColor();
+        
+    // } else {
+    //     // Initial position is invalid, i.e. Block does not go into play
+    //     success = false;
+    //     initialLevel = -1; // Set level to -1 so that player does not score for an invalid Block.
+    // }
+}
+
+Block::~Block() {
+    // Block has been cleared, score points equal to level block was initialized on + 1, squared
+    int scored = std::pow(initialLevel + 1, 2);
+    board.getScore() += scored;
+}
+
+bool Block::spawn(std::shared_ptr<BlockShape> shape, std::pair<int, int> bottomLeftCoordinate) {
+    if (position.size() != 0) return false; // spawn has already been called, since position is not empty
+    std::vector<std::pair<int, int>> newPosition{};
     for (std::pair<int, int> coordinate : shape->getShape()) {
         newPosition.emplace_back(
             bottomLeftCoordinate.first + coordinate.first,
@@ -67,20 +98,14 @@ Block::Block(Board& board, std::shared_ptr<BlockShape> shape, std::pair<int, int
     
     if (changePosition(newPosition)) {
         // Initial position is valid
-        success = true;
+        std::cout << "success" << std::endl;
         color = shape->getColor();
-        
+        return true;
     } else {
         // Initial position is invalid, i.e. Block does not go into play
-        success = false;
         initialLevel = -1; // Set level to -1 so that player does not score for an invalid Block.
+        return false;
     }
-}
-
-Block::~Block() {
-    // Block has been cleared, score points equal to level block was initialized on + 1, squared
-    int scored = std::pow(initialLevel + 1, 2);
-    board.score += scored;
 }
 
 char Block::getColor() const { 
@@ -101,7 +126,7 @@ bool Block::rotateClockwise() {
     // Coordinates of top left corner of smallest rectangle containing the block, after it is rotated clockwise. 
     //   Found by adding the current total occupied columns to the y coordinate of the current bottom left corner. 
     //   This is because occupied columns, after rotation, becomes occupied rows.
-    std::pair<int, int> newTopLeft = {curBottomLeft.first, curBottomLeft.second + cols};
+    std::pair<int, int> newTopLeft = {curBottomLeft.first, curBottomLeft.second + cols - 1};
 
     std::vector<std::pair<int, int>> newPosition;
     
@@ -135,9 +160,9 @@ bool Block::rotateCounterclockwise() {
     // Coordinates of bottom right corner of smallest rectangle containing the block, after it is rotated counterclockwise. 
     //   Found by adding the current total occupied rows to the x coordinate of the current bottom left corner. 
     //   This is because occupied rows, after rotation, becomes occupied columns.
-    std::pair<int, int> newBottomRight = {curBottomLeft.first + rows, curBottomLeft.second};
+    std::pair<int, int> newBottomRight = {curBottomLeft.first + rows - 1, curBottomLeft.second};
 
-    std::vector<std::pair<int, int>> newPosition;
+    std::vector<std::pair<int, int>> newPosition{};
     
     for (std::pair<int, int>& coordinate : position) {
 

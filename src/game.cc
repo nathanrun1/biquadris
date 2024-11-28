@@ -1,7 +1,7 @@
-#include "../include/game.h"
+#include "game.h"
 
-Game::Game(std::shared_ptr<Board> Player1, std::shared_ptr<Board> Player2, std::istream& input):
-    Player1{std::move(Player1)}, Player2{std::move(Player2)}, input{input}, highScore{0}, currPlayer{Player1} {}
+Game::Game(std::shared_ptr<Board> Player1, std::shared_ptr<Board> Player2, std::mt19937 seed, std::istream& input):
+    Player1{std::move(Player1)}, Player2{std::move(Player2)}, seed{seed}, input{input}, highScore{0}, currPlayer{Player1} {}
 
 void Game::startGame() {
     std::string command;
@@ -72,5 +72,7 @@ void Game::startGame() {
         else                       currPlayer = Player1;
     }
 }
+
+std::mt19937 Game::getSeed() const { return seed; };
 
 int Game::getHighScore() const { return highScore; }

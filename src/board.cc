@@ -1,7 +1,10 @@
 #include "board.h"
+#include "cell.h"
 #include <memory>
 
-bool Board::spawnBlock(std::pair<int, int> bottomLeftCoordinate, std::shared_ptr<BlockShape> shape = nullptr) {
+Board::Board() : grid(std::vector<std::vector<Cell>>(BOARD_ROWS, std::vector<Cell>(BOARD_COLS, Cell(nullptr)))) {}
+
+bool Board::spawnBlock(std::pair<int, int> bottomLeftCoordinate, std::shared_ptr<BlockShape> shape) {
     bool spawnSuccess;
     if (!shape) { shape = level->getNext(); }
     std::shared_ptr<Block> spawnedBlock = std::make_shared<Block>(*this, shape, bottomLeftCoordinate, level->getLevelNum(), spawnSuccess);

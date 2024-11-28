@@ -15,12 +15,14 @@
 const int BOARD_ROWS = 18;
 const int BOARD_COLS = 11;
 
+class Cell;
+
 class Board {
     friend class Block;
     friend class Level;
     
     protected:
-        std::vector<std::vector<Cell>> grid = std::vector<std::vector<Cell>>(BOARD_ROWS, std::vector<Cell>(BOARD_COLS, Cell(nullptr)));
+        std::vector<std::vector<Cell>> grid;
         int score; // Current player score
         Level* level; // Current level
         std::shared_ptr<Block> fallingBlock; // Current falling block 
@@ -36,6 +38,8 @@ class Board {
     //   Returns total amount of cleared lines.
     int clearLines();
 public:
+    Board();
+
     virtual ~Board();
 
     // -- Action methods (to be implemented by decorators), along with documentation of default effects --

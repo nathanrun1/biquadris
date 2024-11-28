@@ -35,6 +35,8 @@ class Level {
         void incrementCounter();
         void resetCounter();
 
+        std::string getSeqFile() const;
+
         virtual int getLevelNum() const = 0;
         virtual std::shared_ptr<BlockShape> checkNext() const = 0;
         virtual std::shared_ptr<BlockShape> getNext() = 0;

@@ -1,7 +1,7 @@
 #include "textobserver.h"
 #include "level.h"
 
-TextObserver::TextObserver(Board *board) : board(board) {
+TextObserver::TextObserver(std::shared_ptr<Board> board): board(board) {
     board->attach(this);
     std::cout << "attaching" << std::endl;
 }

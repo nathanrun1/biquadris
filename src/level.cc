@@ -40,6 +40,8 @@ void Level::setSeqFile(const std::string fname)  { seqFile = fname; fstream = st
 void Level::incrementCounter()                   { turnsLastCleared++; }
 void Level::resetCounter()                       { turnsLastCleared = 0; }
 
+std::string Level::getSeqFile() const            { return seqFile; }
+
 // Level Concrete Subclass Constructor/Methods
 // Level_0
 Level_0::Level_0(Board& myBoard, std::mt19937& seed, std::string seqFile, bool isRandom):

@@ -9,10 +9,11 @@ private:
     std::vector<Observer *> observers;
 
 public:
+    virtual ~Subject() = default;
+
     void attach(Observer *observer);
     void detach(Observer *observer);
     void notifyObservers();
-    virtual ~Subject() = default;
 };
 
 #endif // SUBJECT_H

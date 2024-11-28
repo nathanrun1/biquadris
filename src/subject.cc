@@ -2,7 +2,9 @@
 #include <algorithm>
 
 void Subject::attach(Observer *observer) {
-    observers.emplace_back(observer);
+    if (observer) {
+        observers.emplace_back(observer);
+    }
 }
 
 void Subject::detach(Observer *observer) {
@@ -10,7 +12,9 @@ void Subject::detach(Observer *observer) {
 }
 
 void Subject::notifyObservers() {
-    for (auto *observer : observers) {
-        observer->notify();
+    for (Observer *observer : observers) {
+        if (observer) {
+            observer->notify();
+        }
     }
 }

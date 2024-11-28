@@ -77,7 +77,7 @@ std::shared_ptr<Block>& ConcreteBoard::getFallingBlock() {
     return fallingBlock;
 }
 
-ConcreteBoard::ConcreteBoard(std::mt19937& gen, const int initialLevelNum, const std::string initialSeqFile) 
+ConcreteBoard::ConcreteBoard(std::mt19937 gen, const int initialLevelNum, const std::string initialSeqFile) 
     : grid(std::vector<std::vector<Cell>>(BOARD_ROWS, std::vector<Cell>(BOARD_COLS, Cell(nullptr)))), randGen(gen) { 
     std::cout << "setting level" << std::endl;
     setLevelFromNum(initialLevelNum, initialSeqFile);
@@ -105,6 +105,23 @@ int& ConcreteBoard::getScore() {
 Level* ConcreteBoard::getLevel() {
     return level;
 }
+
+char ConcreteBoard::getColorAt(int x, int y) const {
+    const Cell& cell = grid[y][x];
+    if (cell.owner) return cell.owner->getColor();
+    else return ' ';
+}
+
+void ConcreteBoard::setGen(const std::mt19937 newGen) { 
+    randGen = newGen; 
+}
+void ConcreteBoard::setInitialLevelNum(const int newLevel) { 
+    setLevelFromNum(newLevel, level->getSeqFile()); 
+}
+void ConcreteBoard::setInitialSeqFile(const std::string seqFile) { 
+    setLevelFromNum(level->getLevelNum(), seqFile);
+}
+
 
 bool ConcreteBoard::actionClockwise() {
     bool result = fallingBlock->rotateClockwise();
@@ -152,10 +169,4 @@ void ConcreteBoard::actionRandom() {
 void ConcreteBoard::actionNoRandom(std::string file) {
     level->setRandom(false);
     level->setSeqFile(file);
-}
-
-char ConcreteBoard::getColorAt(int x, int y) const {
-    const Cell& cell = grid[y][x];
-    if (cell.owner) return cell.owner->getColor();
-    else return ' ';
 }

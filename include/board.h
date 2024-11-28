@@ -1,5 +1,6 @@
 #ifndef BOARD_H
 #define BOARD_H
+#include <chrono>
 #include <string>
 #include <random>
 #include "block.h"
@@ -36,6 +37,11 @@ public:
     // getFallingBlock() returns this Board's current falling Block for purpose of direct interaction. 
     virtual std::shared_ptr<Block>& getFallingBlock() = 0;
 
+    // -- Setters --
+    virtual void setGen(const std::mt19937 newGen) = 0;                  // Sets the generator
+    virtual void setInitialLevelNum(const int newLevel) = 0;             // Sets the Board's initial level
+    virtual void setInitialSeqFile(const std::string seqFile) = 0;       // Sets the Board's sequence file
+
     // -- Action methods (to be implemented by decorators), along with documentation of default effects --
     //   if returns bool, return value represents whether or not action was successful
     virtual bool actionClockwise() = 0; // Rotates falling Block clockwise
@@ -58,7 +64,6 @@ public:
 };
 
 class ConcreteBoard : public Board {
-
     std::vector<std::vector<Cell>> grid;
     int score; // Current player score
     Level* level; // Current level
@@ -80,7 +85,7 @@ class ConcreteBoard : public Board {
     //   e.g. levelNum = 1 -> level is converted to type Level_1. If levelNum is not a valid Level type, has no effect.
     void setLevelFromNum(const int levelNum, const std::string seqFile = "");
 public:
-    ConcreteBoard(std::mt19937& gen, const int initialLevelNum = 1, std::string initialSeqFile = "");
+    ConcreteBoard(std::mt19937 gen = std::mt19937(std::chrono::system_clock::now().time_since_epoch().count()), const int initialLevelNum = 1, std::string initialSeqFile = "");
     ~ConcreteBoard();
 
     int getRowAmnt() const override; 
@@ -90,6 +95,10 @@ public:
     char getColorAtRC(const int row, const int col) const override;
     std::vector<std::vector<Cell>>& getGrid() override;
     std::shared_ptr<Block>& getFallingBlock() override; 
+
+    void setGen(const std::mt19937 newGen) override;
+    void setInitialLevelNum(const int newLevel) override;
+    void setInitialSeqFile(const std::string seqFile) override;
 
     bool actionClockwise() override; 
     bool actionCounterclockwise() override; 

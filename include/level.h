@@ -25,6 +25,8 @@ class Level {
 
     public:
         Level(Board& myBoard, std::mt19937& seed, std::string seqFile, bool isRandom);
+        Level(const Level& other) = delete;
+        Level(Level&& other);
         virtual ~Level() = default;
 
         void setSeed(const std::mt19937 newSeed);
@@ -43,6 +45,7 @@ class Level {
 class Level_0: public Level {
     public:
         Level_0(Board& myBoard, std::mt19937& randGen, std::string seqFile, bool isRandom);
+        Level_0(Level&& other);
 
         int getLevelNum() const override;
         std::shared_ptr<BlockShape> checkNext() const;
@@ -52,6 +55,7 @@ class Level_0: public Level {
 class Level_1: public Level {
     public:
         Level_1(Board& myBoard, std::mt19937& randGen, std::string seqFile, bool isRandom);
+        Level_1(Level&& other);
 
         int getLevelNum() const override;
         std::shared_ptr<BlockShape> checkNext() const;
@@ -61,6 +65,7 @@ class Level_1: public Level {
 class Level_2: public Level {
     public:
         Level_2(Board& myBoard, std::mt19937& randGen, std::string seqFile, bool isRandom);
+        Level_2(Level&& other);
 
         int getLevelNum() const override;
         std::shared_ptr<BlockShape> checkNext() const;
@@ -70,6 +75,7 @@ class Level_2: public Level {
 class Level_3: public Level {
     public:
         Level_3(Board& myBoard, std::mt19937& randGen, std::string seqFile, bool isRandom);
+        Level_3(Level&& other);
 
         int getLevelNum() const override;
         std::shared_ptr<BlockShape> checkNext() const;
@@ -79,6 +85,7 @@ class Level_3: public Level {
 class Level_4: public Level {
     public:
         Level_4(Board& myBoard, std::mt19937& randGen, std::string seqFile, bool isRandom);
+        Level_4(Level&& other);
 
         int getLevelNum() const override;
         std::shared_ptr<BlockShape> checkNext() const;

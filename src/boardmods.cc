@@ -2,6 +2,28 @@
 
 BoardModification::BoardModification(Board* component) : component(component) {}
 
+BoardModification::~BoardModification() {}
+
+std::vector<std::vector<Cell>>& BoardModification::getGrid() {
+    return component->getGrid();
+}
+std::shared_ptr<Block>& BoardModification::getFallingBlock() {
+    return component->getFallingBlock();
+}
+
+int BoardModification::getRowAmnt() const {
+    return component->getRowAmnt();
+}
+int BoardModification::getColAmnt() const {
+    return component->getColAmnt();
+}
+int& BoardModification::getScore() {
+    return component->getScore();
+}
+Level* BoardModification::getLevel() {
+    return component->getLevel();
+}
+
 HeavyBoard::HeavyBoard(Board* component) : BoardModification(component) {}
 
 bool HeavyBoard::actionClockwise() {
@@ -11,11 +33,11 @@ bool HeavyBoard::actionCounterclockwise() {
     return component->actionCounterclockwise();
 }
 bool HeavyBoard::actionLeft() {
-    if (fallingBlock->left()) {
+    if (component->actionLeft()) {
         for (int i = 0; i < 2; ++i) {
             // Attempt to move falling Block down twice. If either of the down movements fail, then force drop the falling Block.
-            if (!fallingBlock->down()) {
-                actionDrop();
+            if (!component->actionDown()) {
+                component->actionDrop();
                 break;
             }
             return true;
@@ -24,13 +46,14 @@ bool HeavyBoard::actionLeft() {
     else return false;
 }
 bool HeavyBoard::actionRight() {
-    if (fallingBlock->right()) {
+    if (component->actionRight()) {
         for (int i = 0; i < 2; ++i) {
             // Attempt to move falling Block down twice. If either of the down movements fail, then force drop the falling Block.
-            if (!fallingBlock->down()) {
-                actionDrop();
+            if (!component->actionDown()) {
+                component->actionDrop();
                 break;
             }
+            return true;
         }
         return true;
     } 
@@ -42,16 +65,23 @@ bool HeavyBoard::actionDown() {
 void HeavyBoard::actionDrop() {
     component->actionDrop();
 }
-
+void HeavyBoard::actionLevelUp() {
+    component->actionLevelUp();
+}
+void HeavyBoard::actionLevelDown() {
+    component->actionLevelDown();
+}
 void HeavyBoard::actionRandom() {
     component->actionRandom();
 }
 void HeavyBoard::actionNoRandom(std::string file) {
     component->actionNoRandom(file);
 }
-
 char HeavyBoard::getColorAt(int x, int y) const {
-    component->getColorAt(x, y);
+    return component->getColorAt(x, y);
+}
+char HeavyBoard::getColorAtRC(const int row, const int col) const {
+    return getColorAt(getRowAmnt() - row - 1, col);
 }
 
 BlindBoard::BlindBoard(Board* component) : BoardModification(component) {}
@@ -75,7 +105,12 @@ void BlindBoard::actionDrop() {
     component->actionDrop();
     // TODO: Implement such that this modifier removes itself (i.e. replaces itself with its component in the Game, or in whatever class manages the Board)
 }
-
+void BlindBoard::actionLevelUp() {
+    component->actionLevelUp();
+}
+void BlindBoard::actionLevelDown() {
+    component->actionLevelDown();
+}
 void BlindBoard::actionRandom() {
     component->actionRandom();
 }
@@ -88,4 +123,7 @@ char BlindBoard::getColorAt(int x, int y) const {
         return '?';
     }
     else return component->getColorAt(x, y);
+}
+char BlindBoard::getColorAtRC(const int row, const int col) const {
+    return getColorAt(getRowAmnt() - row - 1, col);
 }

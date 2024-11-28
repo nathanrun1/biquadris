@@ -21,22 +21,26 @@ class Block {
     // changePosition(newPosition) attempts to change the block's currently occupied cells to the cells at the coordinates listed in 'newPosition'.
     //   Checks validity by ensuring all cells located at coordinates in 'newPosition' either are empty or owned by this Block. If successful,
     //   Changes the owner fields of relevant Cells accordingly, and returns true. If unsuccessful, returns false. 
+    // Precondition: this Block is the current falling block
     bool changePosition(std::vector<std::pair<int, int>>& newPosition);
 
     // getBottomLeft() returns coordinates (relative to the 'grid') of the bottom left corner of the smallest rectangle containing the block
     std::pair<int, int> getBottomLeft() const;
 
     public:
-        // Block(grid, shape, bottomLeftCoordinate, curLevel, success) initializes a Block, existing inside of the provided grid of cells 'grid', with BlockShape 'shape'
-        //   and initial position such that the bottom left coordinate of the smallest rectangle containing the block is 'bottomLeftCoordinate'.
-        //   If this initial position is invalid, 'grid' is not modified and 'success' is set to false.
-        //   Otherwise, 'success' is set to true, the owners of relevant Cells in 'grid' are set accordingly, and 'success' is set to true.
-        //   When this Block is cleared, if the initial position was valid, it will score according to the level it was initialized during, provided by 'curLevel'
-        Block(Board& board, std::shared_ptr<BlockShape> shape, std::pair<int, int> bottomLeftCoordinate, int curLevel, bool& success);
+        // Block(grid, shape, curLevel) initializes a Block with reference to board 'board', and int value of current
+        //   Level 'curLevel'
+        Block(Board& board, int curLevel);
 
         // Block's destructor. This destructor is called whenever this Block is cleared from 'grid', i.e. there are no longer any Cells in 'grid' that have 
         //   this Block as their 'owner'.
         ~Block();
+
+        // spawn(bottomLeftCoordinate) attempts to spawn this Block with BlockShape 'shape' such that the bottom left coordinate of the smallest rectangle containing the
+        //   Block is 'bottomLeftCoordinate'. If Block has already been spawned, has no effect. Returns true if spawn is valid and thus successful,
+        //   false otherwise. If spawn failed, Block will not score when destroyed, and this method will have no effect if called again.
+        // Precondition: 'board' stores this Block as the current falling block, and returns a shared_ptr to this from board.getFallingBlock()
+        bool spawn(std::shared_ptr<BlockShape> shape, std::pair<int, int> bottomLeftCoordinate);
 
         // -- Getters --
         char getColor() const;

@@ -1,4 +1,4 @@
-#ifndef GRAPHICALWINDOW_H
+/*#ifndef GRAPHICALWINDOW_H
 #define GRAPHICALWINDOW_H
 
 #include <string>
@@ -18,4 +18,4 @@ public:
     ~GraphicalWindow();
 };
 
-#endif // GRAPHICALWINDOW_H
+#endif // GRAPHICALWINDOW_H*/

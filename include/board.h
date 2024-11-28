@@ -37,30 +37,30 @@ class Board {
     //   for each such row, sets nullifies the 'owner' field in each Cell it contains, and "move all above Blocks" down by one.
     //   Returns total amount of cleared lines.
     int clearLines();
+    
 public:
     Board();
-
     virtual ~Board();
 
-    // -- Action methods (to be implemented by decorators), along with documentation of default effects --
-    //   if returns bool, return value represents whether or not action was successful
-    virtual bool actionClockwise() = 0; // Rotates falling Block clockwise
-    virtual bool actionCounterclockwise() = 0; // Rotates falling Block counterclockwise
-    virtual bool actionLeft() = 0; // Moves falling Block left
-    virtual bool actionRight() = 0; // Moves falling Block right
-    virtual bool actionDown() = 0; // Moves falling Block down
-    virtual void actionDrop() = 0; // Moves falling Block as far down as possible 
-    virtual void actionLevelUp() = 0; // Increases the Level by 1
-    virtual void actionLevelDown() = 0; // Decreases the Level by 1
+        // -- Action methods (to be implemented by decorators), along with documentation of default effects --
+        //   if returns bool, return value represents whether or not action was successful
+        virtual bool actionClockwise() = 0; // Rotates falling Block clockwise
+        virtual bool actionCounterclockwise() = 0; // Rotates falling Block counterclockwise
+        virtual bool actionLeft() = 0; // Moves falling Block left
+        virtual bool actionRight() = 0; // Moves falling Block right
+        virtual bool actionDown() = 0; // Moves falling Block down
+        virtual void actionDrop() = 0; // Moves falling Block as far down as possible 
+        virtual void actionLevelUp() = 0; // Increases the Level by 1
+        virtual void actionLevelDown() = 0; // Decreases the Level by 1
 
-    virtual void actionRandom() = 0; // Restores randomness for relevant Levels
-    virtual void actionNoRandom(std::string file) = 0; // Makes relevant Levels non-random, taking input from provided file.
+        virtual void actionRandom() = 0; // Restores randomness for relevant Levels
+        virtual void actionNoRandom(std::string file) = 0; // Makes relevant Levels non-random, taking input from provided file.
 
-    // -- Display methods --
+        // -- Display methods --
 
-    // getColorAt(x, y) returns the character that should be displayed at the specified (x,y) coordinates.
-    //   Note that x increases to the right, y increases upward (e.g. bottom left corner of grid is (0,0)).
-    virtual char getColorAt(int x, int y) const = 0;
+        // getColorAt(x, y) returns the character that should be displayed at the specified (x,y) coordinates.
+        //   Note that x increases to the right, y increases upward (e.g. bottom left corner of grid is (0,0)).
+        virtual char getColorAt(int x, int y) const = 0;
 };
 
 class ConcreteBoard : public Board {

@@ -1,5 +1,4 @@
-#include "../include/blockshape.h"
-#include "../include/level.h"
+#include "level.h"
 
 // Helper function charToBlock() to convert characters inside files into various blockshapes
 std::shared_ptr<BlockShape> Level::stringToBlock(const std::string s)  const {
@@ -29,8 +28,8 @@ std::shared_ptr<BlockShape> Level::readFromFile() {
 } 
 
 // Level Factory Constructor/Methods -------------------------------------------------------------------------------------------------------
-Level::Level(Board* my_board, std::string seqFile, std::mt19937 seed, bool isRandom):
-    my_board{my_board}, turnsLastCleared{0}, seqFile{seqFile}, fstream{std::ifstream{seqFile}}, seed{seed}, isRandom{isRandom} {}
+Level::Level(Board& myBoard, std::mt19937& randGen, std::string seqFile, bool isRandom):
+    myBoard{myBoard}, turnsLastCleared{0}, randGen{randGen}, seqFile{seqFile}, fstream{std::ifstream{seqFile}}, seed{seed}, isRandom{isRandom} {}
 
 void Level::setSeed(const std::mt19937 new_seed) { seed = new_seed; }
 void Level::setRandom(const bool r)              { isRandom = r; }
@@ -39,10 +38,15 @@ void Level::incrementCounter()                   { turnsLastCleared++; }
 void Level::resetCounter()                       { turnsLastCleared = 0; }
 
 // Level Concrete Subclass Constructor/Methods
+// Level_0
+Level_0(Board* myBoard, std::string seqFile, std::mt19937 seed, bool isRandom):
+    Level(Board* myBoard, std::string seqFile, std::mt19937 seed, bool isRandom) {
+        currBlock = getNext();
+    }
+
 int Level_0::getLevelNum() const { return 0; }
-std::shared_ptr<BlockShape> Level_0::getNext() {
-    return readFromFile();
-}
+std::shared_ptr<BlockShape> Level_0::checkNext() const { return currBlock; }
+std::shared_ptr<BlockShape> Level_0::getNext() { currBlock = readFromFile(); return currBlock; }
 
 int Level_1::getLevelNum() const { return 1; }
 std::shared_ptr<BlockShape> Level_1::getNext() {

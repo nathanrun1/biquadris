@@ -1,7 +1,8 @@
-#include "block.h"
-#include "board.h"
 #include <algorithm>
 #include <cmath>
+#include "block.h"
+#include "board.h"
+#include "cell.h"
 
 // yToIndex(y, rows) converts a y coordinate (second value of 2D coordinate) to its index value to use when indexing a Board's grid.
 //   Converts coordinate based on total amount of rows (i.e. height of grid)
@@ -46,10 +47,10 @@ std::pair<int, int> Block::getBottomLeft() const {
     std::pair<int, int>
     {
     std::min_element(position.begin(), position.end(),
-    [&](std::pair<int, int>& a, std::pair<int, int>& b){ return a.first < b.first; })->first
+    [](const std::pair<int, int>& a, const std::pair<int, int>& b){ return a.first < b.first; })->first
     ,
     std::min_element(position.begin(), position.end(),
-    [&](std::pair<int, int>& a, std::pair<int, int>& b){ return a.second < b.second; })->second
+    [](const std::pair<int, int>& a, const std::pair<int, int>& b){ return a.second < b.second; })->second
     };
 }
 

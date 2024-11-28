@@ -2,7 +2,6 @@
 #define BOARD_H
 #include <string>
 #include "block.h"
-#include "level.h"
 
 // INTENTION: Implement Board as an abstract base class, since it will be the concrete object for the decorator pattern
 //   i.e. special actions will act as decorators on board, overriding one of those action methods (e.g. heavy overrides actionDrop() to drop the block twice)
@@ -16,6 +15,7 @@ const int BOARD_ROWS = 18;
 const int BOARD_COLS = 11;
 
 class Cell;
+class Level;
 
 class Board {
     friend class Block;

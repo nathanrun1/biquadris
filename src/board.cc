@@ -1,5 +1,6 @@
 #include "board.h"
 #include "cell.h"
+#include "level.h"
 #include <memory>
 
 Board::Board() : grid(std::vector<std::vector<Cell>>(BOARD_ROWS, std::vector<Cell>(BOARD_COLS, Cell(nullptr)))) {}

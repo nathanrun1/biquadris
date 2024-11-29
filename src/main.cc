@@ -14,9 +14,6 @@ int main(int argc, char* argv[]) {
    player1->setInitialSeqFile("sequence1.txt");
    player2->setInitialSeqFile("sequence2.txt");
 
-   TextObserver textObserver1(std::cout, player1, player2);
-   // ...Add graphical observer here...
-
 
    for (int cmdIndex = 1; cmdIndex < argc; cmdIndex++) {
       // Sets the seed of the board:
@@ -90,7 +87,8 @@ int main(int argc, char* argv[]) {
       }
    }
 
-   std::unique_ptr<Game> controller = std::make_unique<Game>(std::cin, player1, player2);
+   std::shared_ptr<Game> controller = std::make_shared<Game>(std::cin, player1, player2);
+   TextObserver textObserver1(std::cout, controller);
    controller->startGame();
    return 0;   
 }

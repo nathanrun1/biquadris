@@ -140,7 +140,13 @@ bool ConcreteBoard::actionDown() {
 }
 bool ConcreteBoard::actionDrop() {
     fallingBlock->drop();
-    clearLines();
+    int amntCleared = clearLines();
+    if (amntCleared > 0) level->notifyClear();
+    else {
+        level->notifyDrop();
+        if (level->getLevelNum() == 4) clearLines(); // Extra clear in case Level 4 and the added Dot block fills a line
+    }
+
     bool canSpawn = spawnBlock({0, 14});
 
     if (canSpawn) { 

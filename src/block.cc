@@ -70,7 +70,6 @@ Block::Block(Board& board, int curLevel)
     // if (changePosition(newPosition)) {
     //     // Initial position is valid
     //     success = true;
-    //     std::cout << "success" << std::endl;
     //     color = shape->getColor();
         
     // } else {
@@ -98,7 +97,6 @@ bool Block::spawn(std::shared_ptr<BlockShape> shape, std::pair<int, int> bottomL
     
     if (changePosition(newPosition)) {
         // Initial position is valid
-        std::cout << "success" << std::endl;
         color = shape->getColor();
         return true;
     } else {

@@ -50,7 +50,7 @@ Level_0::Level_0(Level&& other) : Level(std::move(other)) {}
 
 int Level_0::getLevelNum() const { return 0; }
 std::shared_ptr<BlockShape> Level_0::checkNext() const { return currBlock; }
-std::shared_ptr<BlockShape> Level_0::getNext() { currBlock = readFromFile(); return currBlock; }
+std::shared_ptr<BlockShape> Level_0::getNext() { currBlock = readFromFile(); }
 
 // Level_1
 Level_1::Level_1(Board& myBoard, std::mt19937& seed, std::string seqFile, bool isRandom):
@@ -68,7 +68,6 @@ std::shared_ptr<BlockShape> Level_1::getNext() {
     else if (randNum == 8)                    currBlock = std::make_shared<S_Shape>();
     else if (randNum == 9)                    currBlock = std::make_shared<Z_Shape>();
     else if (randNum == 10 || randNum == 11)  currBlock = std::make_shared<T_Shape>();
-    std::cout << "Block shape returned" << std::endl;
     return currBlock;
 }
 
@@ -80,7 +79,7 @@ Level_2::Level_2(Level&& other) : Level(std::move(other)) {}
 int Level_2::getLevelNum() const { return 2; }
 std::shared_ptr<BlockShape> Level_2::checkNext() const { return currBlock; }
 std::shared_ptr<BlockShape> Level_2::getNext() {
-    if (isRandom) { 
+    if (!isRandom) { 
         currBlock = readFromFile(); 
         return currBlock;
     }
@@ -104,7 +103,7 @@ Level_3::Level_3(Level&& other) : Level(std::move(other)) {}
 int Level_3::getLevelNum() const { return 3; }
 std::shared_ptr<BlockShape> Level_3::checkNext() const { return currBlock; }
 std::shared_ptr<BlockShape> Level_3::getNext() {
-    if (isRandom) { 
+    if (!isRandom) { 
         currBlock = readFromFile(); 
         return currBlock;
     } 
@@ -129,7 +128,7 @@ Level_4::Level_4(Level&& other) : Level(std::move(other)) {}
 int Level_4::getLevelNum() const { return 4; }
 std::shared_ptr<BlockShape> Level_4::checkNext() const { return currBlock; }
 std::shared_ptr<BlockShape> Level_4::getNext() {
-    if (isRandom) { 
+    if (!isRandom) { 
         currBlock = readFromFile(); 
         return currBlock;
     }

@@ -43,22 +43,24 @@ public:
     virtual void setInitialSeqFile(const std::string seqFile) = 0;       // Sets the Board's sequence file
 
     // -- Action methods (to be implemented by decorators), along with documentation of default effects --
-    //   if returns bool, return value represents whether or not action was successful
+    //   if returns bool, return value represents whether or not action was successful.
+    //   All action methods should notify observrs as most of these commands modify the state of the board.
     virtual bool actionClockwise() = 0; // Rotates falling Block clockwise
     virtual bool actionCounterclockwise() = 0; // Rotates falling Block counterclockwise
     virtual bool actionLeft() = 0; // Moves falling Block left
     virtual bool actionRight() = 0; // Moves falling Block right
     virtual bool actionDown() = 0; // Moves falling Block down
-    virtual void actionDrop() = 0; // Moves falling Block as far down as possible 
+    virtual bool actionDrop() = 0; // Moves falling Block as far down as possible . Returns whether it is possible to spawn a block.
     virtual void actionLevelUp() = 0; // Increases the Level by 1
     virtual void actionLevelDown() = 0; // Decreases the Level by 1
+    virtual void actionSetShape(std::shared_ptr<BlockShape>& newShape) = 0;  // Changes the current shape of the given block.
 
     virtual void actionRandom() = 0; // Restores randomness for relevant Levels
     virtual void actionNoRandom(std::string file) = 0; // Makes relevant Levels non-random, taking input from provided file.
 
-    // -- Display methods --
-    // showBoard() notifies the attatched observers
-    virtual void showBoard() = 0;
+    // -- Display Methods --
+    // wipeBoard() clears the entire board and restarts the game
+    virtual void wipeBoard() = 0;
 
     // getColorAt(x, y) returns the character that should be displayed at the specified (x,y) coordinates.
     //   Note that x increases to the right, y increases upward (e.g. bottom left corner of grid is (0,0)).
@@ -107,14 +109,16 @@ public:
     bool actionLeft() override; 
     bool actionRight() override; 
     bool actionDown() override; 
-    void actionDrop() override; 
+    bool actionDrop() override; 
     void actionLevelUp() override;
     void actionLevelDown() override;
+    void actionSetShape(std::shared_ptr<BlockShape>& newShape) override;
 
     void actionRandom() override; 
     void actionNoRandom(std::string file) override;
 
-    void showBoard() override;
+    void wipeBoard() override;
+
     char getColorAt(int x, int y) const override;
 };
 

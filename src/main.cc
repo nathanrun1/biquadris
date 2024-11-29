@@ -11,12 +11,12 @@ int main(int argc, char* argv[]) {
    // Start with declaring the new Boards
    std::shared_ptr<Board> player1 = std::make_shared<ConcreteBoard>();
    std::shared_ptr<Board> player2 = std::make_shared<ConcreteBoard>();
-   TextObserver textObserver1(std::cout, player1);
-   TextObserver textObserver2(std::cout, player2);
+   player1->setInitialSeqFile("sequence1.txt");
+   player2->setInitialSeqFile("sequence2.txt");
 
-   // ...Add graphical observers here...
-   // ...
-   // ...
+   TextObserver textObserver1(std::cout, player1, player2);
+   // ...Add graphical observer here...
+
 
    for (int cmdIndex = 1; cmdIndex < argc; cmdIndex++) {
       // Sets the seed of the board:

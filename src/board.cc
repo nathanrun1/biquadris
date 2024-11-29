@@ -143,7 +143,13 @@ bool ConcreteBoard::actionDown() {
 }
 bool ConcreteBoard::actionDrop() {
     fallingBlock->drop();
-    clearLines();
+    int amntCleared = clearLines();
+    if (amntCleared > 0) level->notifyClear();
+    else {
+        level->notifyDrop();
+        if (level->getLevelNum() == 4) clearLines(); // Extra clear in case Level 4 and the added Dot block fills a line
+    }
+
     bool canSpawn = spawnBlock({0, 14});
 
     if (canSpawn) { 
@@ -180,10 +186,11 @@ void ConcreteBoard::actionSetShape(std::shared_ptr<BlockShape>& newShape) {
 }
 
 void ConcreteBoard::wipeBoard() {
-    for (std::vector<std::vector<Cell>>::iterator it = grid.begin(); it != grid.end();) {        
-        it = grid.erase(it);
-        grid.push_back(std::vector<Cell>(BOARD_COLS, Cell(nullptr)));
-    }
+    // for (std::vector<std::vector<Cell>>::iterator it = grid.begin(); it != grid.end();) {        
+    //     it = grid.erase(it);
+    //     grid.push_back(std::vector<Cell>(BOARD_COLS, Cell(nullptr)));
+    // }
+    grid = std::vector<std::vector<Cell>>(BOARD_ROWS, std::vector<Cell>(BOARD_COLS, Cell(nullptr))); // Reset grid to initial state
     spawnBlock({0, 14});
     notifyObservers();
 }

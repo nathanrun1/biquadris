@@ -9,22 +9,19 @@
 #include "level.h"
 
 class Game {
-    std::shared_ptr<Board> Player1;
-    std::shared_ptr<Board> Player2;
-    std::mt19937 seed;
     std::istream& input;
 
-    int highScore;
+    std::shared_ptr<Board> Player1;
+    std::shared_ptr<Board> Player2;
     std::shared_ptr<Board> currPlayer;
+    int highScore;
     
     public:
-        Game(std::shared_ptr<Board> Player1, std::shared_ptr<Board> Player2, std::mt19937 seed, std::istream& input);
+        Game(std::istream& input, std::shared_ptr<Board> Player1, std::shared_ptr<Board> Player2);
         ~Game() = default;
 
         void startGame();
         int getHighScore() const;
-        std::mt19937 getSeed() const;
-
 };
 
 

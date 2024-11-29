@@ -16,14 +16,11 @@ bool Block::changePosition(std::vector<std::pair<int, int>>& newPosition) {
     std::vector<std::vector<Cell>>& grid = board.getGrid();
     // Check validity
     for (std::pair<int, int>& coordinate : newPosition) {
-        if (coordinate.second < 0 || coordinate.second >= grid.size() || coordinate.first < 0 || coordinate.first >= grid[coordinate.second].size()) {
-            // Coordinate out of range, new position is invalid
-            return false;
-        }
-        if (grid[coordinate.second][coordinate.first].owner != nullptr && grid[coordinate.second][coordinate.first].owner.get() != this) {
-            // Cell owned by a different Block, new position is invalid
-            return false;
-        }
+        // Coordinate out of range, new position is invalid
+        if (coordinate.second < 0 || coordinate.second >= grid.size() || coordinate.first < 0 || coordinate.first >= grid[coordinate.second].size()) return false;
+        
+        // Cell owned by a different Block, new position is invalid
+        if (grid[coordinate.second][coordinate.first].owner != nullptr && grid[coordinate.second][coordinate.first].owner.get() != this) return false;
     }
     
     // New position is valid...
@@ -70,7 +67,6 @@ Block::Block(Board& board, int curLevel)
     // if (changePosition(newPosition)) {
     //     // Initial position is valid
     //     success = true;
-    //     std::cout << "success" << std::endl;
     //     color = shape->getColor();
         
     // } else {
@@ -98,7 +94,6 @@ bool Block::spawn(std::shared_ptr<BlockShape> shape, std::pair<int, int> bottomL
     
     if (changePosition(newPosition)) {
         // Initial position is valid
-        std::cout << "success" << std::endl;
         color = shape->getColor();
         return true;
     } else {
@@ -245,7 +240,7 @@ void Block::drop() {
 //     return false;
 // }
 
-bool Block::changeShape(BlockShape* newShape) {
+bool Block::changeShape(std::shared_ptr<BlockShape> newShape) {
     std::pair<int, int> curBottomLeft = getBottomLeft();
 
     std::vector<std::pair<int, int>> newPosition;

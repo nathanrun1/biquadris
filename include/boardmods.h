@@ -32,7 +32,7 @@ class HeavyBoard : public BoardModification {
         bool actionLeft() override; 
         bool actionRight() override; 
         bool actionDown() override; 
-        void actionDrop() override; 
+        bool actionDrop() override; 
         void actionLevelUp() override;
         void actionLevelDown() override;
 
@@ -54,7 +54,7 @@ class BlindBoard : public BoardModification {
         bool actionLeft() override; 
         bool actionRight() override; 
         bool actionDown() override; 
-        void actionDrop() override; 
+        bool actionDrop() override; 
         void actionLevelUp() override;
         void actionLevelDown() override;
 

@@ -62,8 +62,9 @@ bool HeavyBoard::actionRight() {
 bool HeavyBoard::actionDown() {
     return component->actionDown();
 }
-void HeavyBoard::actionDrop() {
+bool HeavyBoard::actionDrop() {
     component->actionDrop();
+    return false;
 }
 void HeavyBoard::actionLevelUp() {
     component->actionLevelUp();
@@ -101,8 +102,9 @@ bool BlindBoard::actionRight() {
 bool BlindBoard::actionDown() {
     return component->actionDown();
 }
-void BlindBoard::actionDrop() {
+bool BlindBoard::actionDrop() {
     component->actionDrop();
+    return false;
     // TODO: Implement such that this modifier removes itself (i.e. replaces itself with its component in the Game, or in whatever class manages the Board)
 }
 void BlindBoard::actionLevelUp() {

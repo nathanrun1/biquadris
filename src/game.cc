@@ -7,11 +7,25 @@ Game::Game(std::istream& input, std::shared_ptr<Board> Player1, std::shared_ptr<
         Player1->notifyObservers();
     }
 
+void Game::endGame(std::shared_ptr<Board> loser) {
+    std::cout << "Game over!\n";
+    std::string winner = "Player 1";
+    if (loser == Player1) winner = "Player 2";
+    highScore = std::max(Player1->getScore(), Player2->getScore());
+    std::cout << winner << " wins! New high score: " << highScore << std::endl;
+    std::cout << "Play again? Y/n" << std::endl;
+    std::string answer;
+    std::cin >> answer;
+    if (answer == "Y") {
+        Player1->wipeBoard();
+        Player2->wipeBoard();
+    } else {
+        isOver = true;
+        return;
+    }
+}
 
-// Helper function that consolidates and executes all commands that affect the Board and currPlayer.
-//     Does NOT include commands that read from file or affects items outside the currPlayer (like resetGame.)
-//     Returns a boolean regarding whether to switch turn order.
-bool runPlayerCommand(std::istream& input, std::shared_ptr<Board> currPlayer, int repeat, std::string command) {
+bool Game::runPlayerCommand(std::istream& input, std::shared_ptr<Board> currPlayer, int repeat, std::string command) {
     if (std::string("left").find(command) != std::string::npos) {
         for (int i = 0; i < repeat; i++) { currPlayer->actionLeft(); }
     } else if (std::string("right").find(command) != std::string::npos) {
@@ -23,7 +37,12 @@ bool runPlayerCommand(std::istream& input, std::shared_ptr<Board> currPlayer, in
     } else if (std::string("counterclockwise").find(command) != std::string::npos) {
         for (int i = 0; i < repeat; i++) { currPlayer->actionCounterclockwise();}
     } else if (std::string("drop").find(command) != std::string::npos) {
-        for (int i = 0; i < repeat; i++) { currPlayer->actionDrop(); }
+        for (int i = 0; i < repeat; i++) { 
+            if (!currPlayer->actionDrop()) {
+                endGame(currPlayer);
+                return false; // Loser starts first
+            }
+        }
         return true;
     } else if (std::string("levelup").find(command) != std::string::npos) {
         for (int i = 0; i < repeat; i++) { currPlayer->actionLevelUp();}
@@ -111,6 +130,7 @@ void Game::startGame() {
         }
        if (switchPlayer && currPlayer == Player1)     currPlayer = Player2;
         else if (switchPlayer && currPlayer == Player2)     currPlayer = Player1;
+        if (isOver) return; // End game if over
     }
 }
 

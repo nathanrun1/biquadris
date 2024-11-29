@@ -14,7 +14,6 @@ bool ConcreteBoard::spawnBlock(std::pair<int, int> bottomLeftCoordinate, std::sh
         shape = level->checkNext();
         level->getNext(); 
     }
-    //std::shared_ptr<Block> spawnedBlock = std::make_shared<Block>(*this, shape, bottomLeftCoordinate, level->getLevelNum(), spawnSuccess);
     std::shared_ptr<Block> spawnedBlock = std::shared_ptr<Block>(new Block(*this, level->getLevelNum()));
     fallingBlock = spawnedBlock;
     bool spawnSuccess = spawnedBlock->spawn(shape, bottomLeftCoordinate);
@@ -118,27 +117,24 @@ void ConcreteBoard::setInitialSeqFile(const std::string seqFile) {
 
 bool ConcreteBoard::actionClockwise() {
     bool result = fallingBlock->rotateClockwise();
-    notifyObservers();
     return result;
 }
 bool ConcreteBoard::actionCounterclockwise() {
     bool result = fallingBlock->rotateCounterclockwise();
-    notifyObservers();
     return result;
 }
 bool ConcreteBoard::actionLeft() {
     bool result = fallingBlock->left();
-    notifyObservers();
     return result;
 }
 bool ConcreteBoard::actionRight() {
     bool result = fallingBlock->right();
-    notifyObservers();
+    
     return result;
 } 
 bool ConcreteBoard::actionDown() {
     bool result = fallingBlock->down();
-    notifyObservers();
+    
     return result;
 }
 bool ConcreteBoard::actionDrop() {
@@ -147,7 +143,7 @@ bool ConcreteBoard::actionDrop() {
     bool canSpawn = spawnBlock({0, 14});
 
     if (canSpawn) { 
-        notifyObservers();
+        
         return true;
     } else {
         return false;
@@ -156,27 +152,23 @@ bool ConcreteBoard::actionDrop() {
 
 void ConcreteBoard::actionLevelUp() {
     setLevelFromNum(level->getLevelNum() + 1, level->getSeqFile());
-    notifyObservers();
 }
 
 void ConcreteBoard::actionLevelDown() {
     setLevelFromNum(level->getLevelNum() - 1, level->getSeqFile());
-    notifyObservers();
 }
 
 void ConcreteBoard::actionRandom() {
     level->setRandom(true);
-    notifyObservers();
+    
 }
 void ConcreteBoard::actionNoRandom(std::string file) {
     level->setRandom(false);
     level->setSeqFile(file);
-    notifyObservers();
 }
 
 void ConcreteBoard::actionSetShape(std::shared_ptr<BlockShape>& newShape) {
     fallingBlock->changeShape(newShape);
-    notifyObservers();
 }
 
 void ConcreteBoard::wipeBoard() {
@@ -185,7 +177,6 @@ void ConcreteBoard::wipeBoard() {
         grid.push_back(std::vector<Cell>(BOARD_COLS, Cell(nullptr)));
     }
     spawnBlock({0, 14});
-    notifyObservers();
 }
 
 char ConcreteBoard::getColorAt(int x, int y) const {

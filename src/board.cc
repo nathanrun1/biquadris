@@ -10,7 +10,10 @@ Board::Board() {}
 Board::~Board() {}
 
 bool ConcreteBoard::spawnBlock(std::pair<int, int> bottomLeftCoordinate, std::shared_ptr<BlockShape> shape) {
-    if (!shape) { shape = level->getNext(); }
+    if (!shape) { 
+        shape = level->checkNext();
+        level->getNext(); 
+    }
     //std::shared_ptr<Block> spawnedBlock = std::make_shared<Block>(*this, shape, bottomLeftCoordinate, level->getLevelNum(), spawnSuccess);
     std::shared_ptr<Block> spawnedBlock = std::shared_ptr<Block>(new Block(*this, level->getLevelNum()));
     fallingBlock = spawnedBlock;

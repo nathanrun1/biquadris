@@ -5,9 +5,6 @@ Game::Game(std::istream& input, std::shared_ptr<Board> Player1, std::shared_ptr<
         Player1->getLevel()->getNext();
         Player2->getLevel()->getNext();
         Player1->notifyObservers();
-        
-        // Player1->showBoard();
-        // Player2->showBoard();
     }
 
 

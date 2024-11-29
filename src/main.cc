@@ -92,6 +92,5 @@ int main(int argc, char* argv[]) {
 
    std::unique_ptr<Game> controller = std::make_unique<Game>(std::cin, player1, player2);
    controller->startGame();
-
    return 0;   
 }

@@ -16,14 +16,11 @@ bool Block::changePosition(std::vector<std::pair<int, int>>& newPosition) {
     std::vector<std::vector<Cell>>& grid = board.getGrid();
     // Check validity
     for (std::pair<int, int>& coordinate : newPosition) {
-        if (coordinate.second < 0 || coordinate.second >= grid.size() || coordinate.first < 0 || coordinate.first >= grid[coordinate.second].size()) {
-            // Coordinate out of range, new position is invalid
-            return false;
-        }
-        if (grid[coordinate.second][coordinate.first].owner != nullptr && grid[coordinate.second][coordinate.first].owner.get() != this) {
-            // Cell owned by a different Block, new position is invalid
-            return false;
-        }
+        // Coordinate out of range, new position is invalid
+        if (coordinate.second < 0 || coordinate.second >= grid.size() || coordinate.first < 0 || coordinate.first >= grid[coordinate.second].size()) return false;
+        
+        // Cell owned by a different Block, new position is invalid
+        if (grid[coordinate.second][coordinate.first].owner != nullptr && grid[coordinate.second][coordinate.first].owner.get() != this) return false;
     }
     
     // New position is valid...

@@ -18,7 +18,7 @@ bool checkVec(std::vector<std::pair<int, int>> vec, std::pair<int, int> val) {
 }
 
 void TextObserver::notify() {
-    // system("clear");
+    system("clear");
     std::shared_ptr<BlockShape> p1NextBlock = player1->getLevel()->checkNext();
     std::shared_ptr<BlockShape> p2NextBlock = player2->getLevel()->checkNext();
 
@@ -43,11 +43,10 @@ void TextObserver::notify() {
     output << "-----------          -----------" << std::endl;
     output << "Next:      " << "          " << "Next:      " << std::endl;
     
-    // Blocks can only be at most 4 blocks tall, hence we only set row to 3.
+    // Blocks can only be at most 2 blocks tall, hence we only set row to 3 to include an extra line for inputs:
     for (int row = 0; row < 4; ++row) {
         for (int col = 0; col < player1->getColAmnt(); ++col) {
             std::pair<int, int> val = {col, row};
-
             if (checkVec(p1NextBlock->getShape(), val)) output << p1NextBlock->getColor();
             else                                        output << " ";
         }
@@ -55,13 +54,12 @@ void TextObserver::notify() {
         output << "          ";
 
         for (int col = 0; col < player2->getColAmnt(); ++col) {
-            std::pair<int, int> val = {row, col};
-            if (checkVec(p1NextBlock->getShape(), val)) output << p2NextBlock->getColor();
+            std::pair<int, int> val = {col, row};
+            if (checkVec(p2NextBlock->getShape(), val)) output << p2NextBlock->getColor();
             else                                        output << " ";
         }
 
         output << std::endl;
-        
     }
 }
 

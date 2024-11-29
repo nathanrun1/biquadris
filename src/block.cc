@@ -245,7 +245,7 @@ void Block::drop() {
 //     return false;
 // }
 
-bool Block::changeShape(BlockShape* newShape) {
+bool Block::changeShape(std::shared_ptr<BlockShape> newShape) {
     std::pair<int, int> curBottomLeft = getBottomLeft();
 
     std::vector<std::pair<int, int>> newPosition;

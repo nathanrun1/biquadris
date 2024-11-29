@@ -1,17 +1,11 @@
 # Compiler and flags
 CXX = g++
-CXXFLAGS = -std=c++20 -Wall -g -Wextra -I./include
+CXXFLAGS = -std=c++20 -Wall -g -Wextra
 
-# Directories
-SRC_DIR = src
-INCLUDE_DIR = include
-BUILD_DIR = build
-BIN_DIR = build/bin
-
-# Files
-TARGET = $(BIN_DIR)/biquadris
-SOURCES = $(wildcard $(SRC_DIR)/*.cc)
-OBJECTS = $(patsubst $(SRC_DIR)/%.cc, $(BUILD_DIR)/%.o, $(SOURCES))
+# Directories (all files in the same directory)
+TARGET = biquadris
+SOURCES = $(wildcard *.cc)
+OBJECTS = $(SOURCES:.cc=.o)
 
 # Rules
 .PHONY: all clean
@@ -19,12 +13,10 @@ OBJECTS = $(patsubst $(SRC_DIR)/%.cc, $(BUILD_DIR)/%.o, $(SOURCES))
 all: $(TARGET)
 
 $(TARGET): $(OBJECTS)
-	@mkdir -p $(BIN_DIR)
 	$(CXX) $(CXXFLAGS) $^ -o $@
 
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cc $(INCLUDE_DIR)/%.h
-	@mkdir -p $(BUILD_DIR)
+%.o: %.cc %.h
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
-	rm -rf $(BUILD_DIR) $(BIN_DIR)
+	rm -f $(OBJECTS) $(TARGET)

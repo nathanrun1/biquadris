@@ -57,6 +57,8 @@ public:
     virtual void actionNoRandom(std::string file) = 0; // Makes relevant Levels non-random, taking input from provided file.
 
     // -- Display methods --
+    // showBoard() notifies the attatched observers
+    virtual void showBoard() = 0;
 
     // getColorAt(x, y) returns the character that should be displayed at the specified (x,y) coordinates.
     //   Note that x increases to the right, y increases upward (e.g. bottom left corner of grid is (0,0)).
@@ -112,6 +114,7 @@ public:
     void actionRandom() override; 
     void actionNoRandom(std::string file) override;
 
+    void showBoard() override;
     char getColorAt(int x, int y) const override;
 };
 

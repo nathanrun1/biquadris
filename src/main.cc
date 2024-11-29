@@ -11,8 +11,8 @@ int main(int argc, char* argv[]) {
    // Start with declaring the new Boards
    std::shared_ptr<Board> player1 = std::make_shared<ConcreteBoard>();
    std::shared_ptr<Board> player2 = std::make_shared<ConcreteBoard>();
-   TextObserver textObserver1(player1);
-   TextObserver textObserver2(player2);
+   TextObserver textObserver1(std::cout, player1);
+   TextObserver textObserver2(std::cout, player2);
 
    // ...Add graphical observers here...
    // ...
@@ -90,34 +90,8 @@ int main(int argc, char* argv[]) {
       }
    }
 
-   
-   
-   // player1->actionRight();
-
-
-  /*
-   // Create the two PLAYER classes as Concrete Boards
-   std::cout << "main" << std::endl;
-   std::mt19937 gen(10);
-   std::cout << "gen constructed" << std::endl;
-   std::shared_ptr<Board> player1 = std::make_shared<ConcreteBoard>(gen);
-   std::cout << "board made" << std::endl;
-   TextObserver textObserver(player1);
-   std::cout << "main" << std::endl;
-   std::cout << (bool)player1->getFallingBlock() << std::endl;
-   std::cout << "color: " << player1->getColorAtRC(0, 3) << std::endl;
-   player1->actionRight();
-   
-   player1->actionRight();
-   player1->actionRight();
-   player1->actionClockwise();
-   std::cout << "color: " << player1->getColorAtRC(0, 3) << std::endl;   
-   
-
-   // Create the GAME Object using Board classes as paramters
-   // Set the observer to the two PLAYER classes
-   // Use Game startGame() function
-   */
+   std::unique_ptr<Game> controller = std::make_unique<Game>(std::cin, player1, player2);
+   // controller->startGame();
 
    return 0;   
 }

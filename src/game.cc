@@ -1,7 +1,14 @@
 #include "game.h"
 
-Game::Game(std::shared_ptr<Board> Player1, std::shared_ptr<Board> Player2, std::mt19937 seed, std::istream& input):
-    Player1{std::move(Player1)}, Player2{std::move(Player2)}, seed{seed}, input{input}, highScore{0}, currPlayer{Player1} {}
+Game::Game(std::istream& input, std::shared_ptr<Board> Player1, std::shared_ptr<Board> Player2):
+    input{input}, Player1{Player1}, Player2{Player2}, currPlayer{Player1}, highScore{0} {
+        Player1->showBoard();
+        Player2->showBoard();
+    }
+
+void runCommand(std::shared_ptr<Board> std::string command) {
+
+}
 
 void Game::startGame() {
     std::string command;
@@ -17,11 +24,9 @@ void Game::startGame() {
         
         input >> command;
         if (std::string("left").find(command) != std::string::npos) {
-            for (int i = 0; i < repeat; i++) {
-                
-            }
-        } else if (std::string("right").find(command) != std::string::npos) {
             for (int i = 0; i < repeat; i++) { currPlayer->actionLeft(); }
+        } else if (std::string("right").find(command) != std::string::npos) {
+            for (int i = 0; i < repeat; i++) { currPlayer->actionRight(); }
         } else if (std::string("down").find(command) != std::string::npos) {
             for (int i = 0; i < repeat; i++) { currPlayer->actionDown();}
         } else if (std::string("clockwise").find(command) != std::string::npos) {
@@ -66,13 +71,13 @@ void Game::startGame() {
             // Set currentblock to T
         } else if (std::string("restart").find(command) != std::string::npos) {
             // restart the game
+        } else { 
+            continue;
         }
 
         if (currPlayer == Player1) currPlayer = Player2;
         else                       currPlayer = Player1;
     }
 }
-
-std::mt19937 Game::getSeed() const { return seed; };
 
 int Game::getHighScore() const { return highScore; }

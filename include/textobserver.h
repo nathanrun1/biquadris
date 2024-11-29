@@ -8,10 +8,11 @@
 
 class TextObserver : public Observer {
 private:
+    std::ostream& output;
     std::shared_ptr<Board> board;
 
 public:
-    explicit TextObserver(std::shared_ptr<Board> board);
+    explicit TextObserver(std::ostream& output, std::shared_ptr<Board> board);
     void notify() override;
     ~TextObserver() override;
 };

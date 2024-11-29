@@ -1,23 +1,25 @@
 #include "textobserver.h"
 #include "level.h"
 
-TextObserver::TextObserver(std::shared_ptr<Board> board): board(board) {
+TextObserver::TextObserver(std::ostream& output, std::shared_ptr<Board> board): output(output), board(board) {
     board->attach(this);
-    std::cout << "attaching" << std::endl;
+    output << "attaching" << std::endl;
 }
 
 void TextObserver::notify() {
-    std::cout << "Level: " << board->getLevel()->getLevelNum()
-                << "    Score: " << board->getScore() << std::endl;
-    std::cout << "-----------" << std::endl;
+    output << "Level:    " << board->getLevel()->getLevelNum() << std::endl;
+    output << "Score:    " << board->getScore() << std::endl;
+    output << "-----------" << std::endl;
 
     for (int row = 0; row < board->getRowAmnt(); ++row) {
         for (int col = 0; col < board->getColAmnt(); ++col) {
-            std::cout << board->getColorAtRC(row, col);
+            output << board->getColorAtRC(row, col);
         }
-        std::cout << std::endl;
+        output << std::endl;
     }
-    std::cout << "-----------" << std::endl;
+    output << "-----------" << std::endl;
+    output << "Next: " << std::endl;
+    // TO DO: Please add NEXT block over here!
 }
 
 TextObserver::~TextObserver() {

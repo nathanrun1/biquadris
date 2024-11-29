@@ -50,7 +50,7 @@ Level_0::Level_0(Level&& other) : Level(std::move(other)) {}
 
 int Level_0::getLevelNum() const { return 0; }
 std::shared_ptr<BlockShape> Level_0::checkNext() const { return currBlock; }
-std::shared_ptr<BlockShape> Level_0::getNext() { currBlock = readFromFile(); }
+std::shared_ptr<BlockShape> Level_0::getNext() { currBlock = readFromFile(); return currBlock; }
 
 // Level_1
 Level_1::Level_1(Board& myBoard, std::mt19937& seed, std::string seqFile, bool isRandom):

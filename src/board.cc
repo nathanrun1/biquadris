@@ -12,7 +12,7 @@ Board::~Board() {}
 bool ConcreteBoard::spawnBlock(std::pair<int, int> bottomLeftCoordinate, std::shared_ptr<BlockShape> shape) {
     if (!shape) { 
         shape = level->checkNext();
-        level->getNext(); 
+        level->getNext();
     }
     std::shared_ptr<Block> spawnedBlock = std::shared_ptr<Block>(new Block(*this, level->getLevelNum()));
     fallingBlock = spawnedBlock;
@@ -83,6 +83,7 @@ ConcreteBoard::ConcreteBoard(std::mt19937 gen, const int initialLevelNum, const 
     : grid(std::vector<std::vector<Cell>>(BOARD_ROWS, std::vector<Cell>(BOARD_COLS, Cell(nullptr)))), randGen(gen) { 
     setLevelFromNum(initialLevelNum, initialSeqFile);
     spawnBlock({0, 14});
+    level->getNext();
 }
 
 ConcreteBoard::~ConcreteBoard() {
@@ -109,7 +110,7 @@ void ConcreteBoard::setGen(const std::mt19937 newGen) {
     randGen = newGen; 
 }
 void ConcreteBoard::setInitialLevelNum(const int newLevel) { 
-    setLevelFromNum(newLevel, level->getSeqFile()); 
+    setLevelFromNum(newLevel, level->getSeqFile());
 }
 void ConcreteBoard::setInitialSeqFile(const std::string seqFile) { 
     setLevelFromNum(level->getLevelNum(), seqFile);
@@ -152,10 +153,12 @@ bool ConcreteBoard::actionDrop() {
 
 void ConcreteBoard::actionLevelUp() {
     setLevelFromNum(level->getLevelNum() + 1, level->getSeqFile());
+    level->getNext();
 }
 
 void ConcreteBoard::actionLevelDown() {
     setLevelFromNum(level->getLevelNum() - 1, level->getSeqFile());
+    level->getNext();
 }
 
 void ConcreteBoard::actionRandom() {
@@ -172,10 +175,7 @@ void ConcreteBoard::actionSetShape(std::shared_ptr<BlockShape>& newShape) {
 }
 
 void ConcreteBoard::wipeBoard() {
-    for (std::vector<std::vector<Cell>>::iterator it = grid.begin(); it != grid.end();) {        
-        it = grid.erase(it);
-        grid.push_back(std::vector<Cell>(BOARD_COLS, Cell(nullptr)));
-    }
+    grid = std::vector<std::vector<Cell>>(BOARD_ROWS, std::vector<Cell>(BOARD_COLS, Cell(nullptr))); // Reset grid to initial state
     spawnBlock({0, 14});
 }
 

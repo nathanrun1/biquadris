@@ -64,7 +64,8 @@ void Game::startGame() {
     bool switchPlayer;
 
     Player1->getLevel()->getNext();
-    Player2->getLevel()->getNext();
+     Player2->getLevel()->getNext();
+
     notifyObservers();
     
 
@@ -106,14 +107,15 @@ void Game::startGame() {
                 switchPlayer = runPlayerCommand(input, currPlayer, repeat, command);
                 notifyObservers();
             }
+            continue;
         } else if (std::string("restart").find(command) != std::string::npos) {
             Player1->wipeBoard();
             Player2->wipeBoard();
         } else {
             switchPlayer = runPlayerCommand(input, currPlayer, repeat, command);
-            notifyObservers();
         }
 
+        notifyObservers();
        if (switchPlayer && currPlayer == Player1)          currPlayer = Player2;
        else if (switchPlayer && currPlayer == Player2)     currPlayer = Player1;
     }

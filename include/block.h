@@ -59,12 +59,6 @@ class Block {
         
 
         // -- Debugging --
-
-        // changeShape(newShape) attempts to change this block's BlockShape to new BlockShape. Preserves the bottom left corner of smallest rectangle containing block.
-        //   Checks validity of this change using the provided grid of cells 'grid'. If change successful returns true, 
-        //   otherwise returns false and has no effect.
-        // bool changeShape(std::unique_ptr<BlockShape> newShape);
-
         // changeShape(newShape) attempts to change this block's BlockShape to new BlockShape. Preserves the bottom left corner of smallest rectangle containing block.
         //   Checks validity of this change using the provided grid of cells 'grid'. If change successful returns true, 
         //   otherwise returns false and has no effect.

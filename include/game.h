@@ -8,7 +8,7 @@
 #include "board.h"
 #include "level.h"
 
-class Game {
+class Game: public Subject {
     std::istream& input;
 
     std::shared_ptr<Board> Player1;
@@ -29,9 +29,11 @@ class Game {
 public:
     Game(std::istream& input, std::shared_ptr<Board> Player1, std::shared_ptr<Board> Player2);
     ~Game() = default;
+        void startGame();
 
-    void startGame();
-    int getHighScore() const;
+        std::shared_ptr<Board> getPlayer1() const;
+        std::shared_ptr<Board> getPlayer2() const;
+        int getHighScore() const;
 };
 
 

@@ -1,9 +1,8 @@
 #include "textobserver.h"
 #include "level.h"
 
-TextObserver::TextObserver(std::ostream& output, std::shared_ptr<Board> p1, std::shared_ptr<Board> p2): output(output), player1(p1), player2(p2) {
-    p1->attach(this);
-    p2->attach(this);
+TextObserver::TextObserver(std::ostream& output, std::shared_ptr<Game> c): output(output), controller(c) {
+    controller->attach(this);
 }
 
 
@@ -19,23 +18,26 @@ bool checkVec(std::vector<std::pair<int, int>> vec, std::pair<int, int> val) {
 
 void TextObserver::notify() {
     system("clear");
-    std::shared_ptr<BlockShape> p1NextBlock = player1->getLevel()->checkNext();
-    std::shared_ptr<BlockShape> p2NextBlock = player2->getLevel()->checkNext();
+    std::shared_ptr<BlockShape> p1NextBlock = controller->getPlayer1()->getLevel()->checkNext();
+    std::shared_ptr<BlockShape> p2NextBlock = controller->getPlayer2()->getLevel()->checkNext();
+
+    output << "High Score: " << controller->getHighScore()  << "\n" << std::endl;
+
 
     output << "Player 1 --          Player 2 --" << std::endl;
-    output << "Level:    " << player1->getLevel()->getLevelNum() << "          "  << "Level:    " << player2->getLevel()->getLevelNum() << std::endl;
-    output << "Score:    " << player1->getScore() << "          " << "Score:    " << player2->getScore() << std::endl;
+    output << "Level:    " << controller->getPlayer1()->getLevel()->getLevelNum() << "          "  << "Level:    " << controller->getPlayer2()->getLevel()->getLevelNum() << std::endl;
+    output << "Score:    " << controller->getPlayer1()->getScore() << "          " << "Score:    " << controller->getPlayer2()->getScore() << std::endl;
     output << "-----------          -----------" << std::endl;
 
-    for (int row = 0; row < player1->getRowAmnt(); ++row) {
-        for (int col = 0; col < player1->getColAmnt(); ++col) {
-            output << player1->getColorAtRC(row, col);
+    for (int row = 0; row < controller->getPlayer1()->getRowAmnt(); ++row) {
+        for (int col = 0; col < controller->getPlayer1()->getColAmnt(); ++col) {
+            output << controller->getPlayer1()->getColorAtRC(row, col);
         }
 
         output << "          ";
 
-        for (int col = 0; col < player2->getColAmnt(); ++col) {
-            output << player2->getColorAtRC(row, col);
+        for (int col = 0; col < controller->getPlayer2()->getColAmnt(); ++col) {
+            output << controller->getPlayer2()->getColorAtRC(row, col);
         }
 
         output << std::endl;
@@ -45,7 +47,7 @@ void TextObserver::notify() {
     
     // Blocks can only be at most 2 blocks tall, hence we only set row to 3 to include an extra line for inputs:
     for (int row = 0; row < 4; ++row) {
-        for (int col = 0; col < player1->getColAmnt(); ++col) {
+        for (int col = 0; col < controller->getPlayer1()->getColAmnt(); ++col) {
             std::pair<int, int> val = {col, row};
             if (checkVec(p1NextBlock->getShape(), val)) output << p1NextBlock->getColor();
             else                                        output << " ";
@@ -53,7 +55,7 @@ void TextObserver::notify() {
         
         output << "          ";
 
-        for (int col = 0; col < player2->getColAmnt(); ++col) {
+        for (int col = 0; col < controller->getPlayer2()->getColAmnt(); ++col) {
             std::pair<int, int> val = {col, row};
             if (checkVec(p2NextBlock->getShape(), val)) output << p2NextBlock->getColor();
             else                                        output << " ";
@@ -64,6 +66,5 @@ void TextObserver::notify() {
 }
 
 TextObserver::~TextObserver() {
-    player1->detach(this);
-    player2->detach(this);
+    controller->detach(this);
 }

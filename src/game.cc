@@ -2,9 +2,6 @@
 
 Game::Game(std::istream& input, std::shared_ptr<Board> Player1, std::shared_ptr<Board> Player2):
     input{input}, Player1{Player1}, Player2{Player2}, currPlayer{Player1}, highScore{0} {
-        Player1->getLevel()->getNext();
-        Player2->getLevel()->getNext();
-        Player1->notifyObservers();
     }
 
 void Game::endGame(std::shared_ptr<Board> loser) {
@@ -85,6 +82,12 @@ void Game::startGame() {
     int repeat = 1;
     bool switchPlayer;
 
+    Player1->getLevel()->getNext();
+     Player2->getLevel()->getNext();
+
+    notifyObservers();
+    
+
     while (input >> command) {
         switchPlayer = false;        // Reset state of switchPlayer so each non-drop command does not switch to the opponent
 
@@ -121,17 +124,23 @@ void Game::startGame() {
                 }
 
                 switchPlayer = runPlayerCommand(input, currPlayer, repeat, command);
+                notifyObservers();
             }
+            continue;
         } else if (std::string("restart").find(command) != std::string::npos) {
             Player1->wipeBoard();
             Player2->wipeBoard();
         } else {
             switchPlayer = runPlayerCommand(input, currPlayer, repeat, command);
         }
-       if (switchPlayer && currPlayer == Player1)     currPlayer = Player2;
-        else if (switchPlayer && currPlayer == Player2)     currPlayer = Player1;
-        if (isOver) return; // End game if over
+
+        notifyObservers();
+       if (switchPlayer && currPlayer == Player1)          currPlayer = Player2;
+       else if (switchPlayer && currPlayer == Player2)     currPlayer = Player1;
+      if (isOver) return; // End game if over
     }
 }
 
+std::shared_ptr<Board> Game::getPlayer1() const { return Player1; }
+std::shared_ptr<Board> Game::getPlayer2() const { return Player2; }
 int Game::getHighScore() const { return highScore; }

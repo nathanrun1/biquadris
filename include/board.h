@@ -20,7 +20,7 @@ const int BOARD_COLS = 11;
 class Cell;
 class Level;
 
-class Board : public Subject {
+class Board {
 public:
     Board();
     virtual ~Board();

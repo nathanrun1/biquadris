@@ -11,13 +11,14 @@
 class Level {
     protected:
         Board& myBoard;
-        int turnsLastCleared;
+        int sinceCleared = 0;
         
         std::mt19937& seed;
         std::string seqFile;
         std::ifstream fstream;
         std::shared_ptr<BlockShape> currBlock;
         bool isRandom;
+        
         
         // Helper functions for majority of public functions below:
         std::shared_ptr<BlockShape> stringToBlock(const std::string s) const;
@@ -32,8 +33,8 @@ class Level {
         void setSeed(const std::mt19937 newSeed);
         void setRandom(const bool r);
         void setSeqFile(const std::string fname);
-        void incrementCounter();
-        void resetCounter();
+        virtual void notifyDrop();
+        virtual void notifyClear();
 
         std::string getSeqFile() const;
 
@@ -90,6 +91,8 @@ class Level_4: public Level {
         Level_4(Level&& other);
 
         int getLevelNum() const override;
+        void notifyDrop() override;
+        void notifyClear() override;
         std::shared_ptr<BlockShape> checkNext() const;
         std::shared_ptr<BlockShape> getNext() override;
 };

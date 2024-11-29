@@ -3,14 +3,17 @@
 
 #include "observer.h"
 #include "board.h"
+#include <memory>
 #include <iostream>
 
 class TextObserver : public Observer {
 private:
-    Board *board;
+    std::ostream& output;
+    std::shared_ptr<Board> player1;
+    std::shared_ptr<Board> player2;
 
 public:
-    explicit TextObserver(Board *board);
+    explicit TextObserver(std::ostream& output, std::shared_ptr<Board> player1, std::shared_ptr<Board> player2);
     void notify() override;
     ~TextObserver() override;
 };

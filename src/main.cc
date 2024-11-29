@@ -3,45 +3,94 @@
 #include "textobserver.h"
 // #include ..observer classes...
 
+#include <memory>
+#include <sstream>
 #include <iostream>
 
 int main(int argc, char* argv[]) {
-   // Create the two PLAYER classes as Concrete Boards
-   std::cout << "main" << std::endl;
-   std::mt19937 gen(10);
-   std::cout << "gen constructed" << std::endl;
-   Board* player1 = new ConcreteBoard(gen);
-   std::cout << "board made" << std::endl;
-   TextObserver textObserver(player1);
-   std::cout << "main" << std::endl;
-   std::cout << (bool)player1->getFallingBlock() << std::endl;
-   std::cout << "color: " << player1->getColorAtRC(0, 3) << std::endl;
-   player1->actionRight();
-   player1->actionRight();
-   player1->actionRight();
-   player1->actionClockwise();
-   std::cout << "color: " << player1->getColorAtRC(0, 3) << std::endl;
+   // Start with declaring the new Boards
+   std::shared_ptr<Board> player1 = std::make_shared<ConcreteBoard>();
+   std::shared_ptr<Board> player2 = std::make_shared<ConcreteBoard>();
+   player1->setInitialSeqFile("sequence1.txt");
+   player2->setInitialSeqFile("sequence2.txt");
 
-   // for (int i = 0; i < argc - 1; i++) {
-   //    if (argv[i] == "-text") {
-   //       // Set to ONLY create the graphical observer
-   //       std::cout << argv[i + 1] << std::endl;
-   //    } else if (argv[i] == "-seed") {
-   //       std::cout << argv[i + 1] << std::endl;
-   //    } else if (argv[i] == "-scriptfile1") {
-   //       std::cout << argv[i + 1] << std::endl;
-   //    } else if (argv[i] == "-scriptfile2") {
-   //       std::cout << argv[i + 1] << std::endl;
-   //    } else if (argv[i] == "-startlevel") {
-   //       std::cout << argv[i + 1] << std::endl;
-   //    }
-   // }
+   TextObserver textObserver1(std::cout, player1, player2);
+   // ...Add graphical observer here...
 
-   
 
-   // Create the GAME Object using Board classes as paramters
-   // Set the observer to the two PLAYER classes
-   // Use Game startGame() function
+   for (int cmdIndex = 1; cmdIndex < argc; cmdIndex++) {
+      // Sets the seed of the board:
+      if (std::string(argv[cmdIndex]) == "-seed") {
+         if (cmdIndex + 1 == argc) {
+            std::cerr << "Seed NOT Provided!" << std::endl;
+            return 1;
+         }
 
-   
+         std::string seedArg = argv[cmdIndex + 1];
+         std::seed_seq seedArgSeq (seedArg.begin(), seedArg.end());
+         std::mt19937 gen(seedArgSeq);
+
+         player1->setGen(gen);
+         player2->setGen(gen);
+         cmdIndex++;
+         continue;
+
+      // Sets the level of the board:
+      } else if (std::string(argv[cmdIndex]) == "-startlevel") {
+         if (cmdIndex + 1 == argc) {
+            std::cerr << "Level NOT Provided!" << std::endl;
+            return 1;
+         }
+
+         std::istringstream sstream{std::string(argv[cmdIndex + 1])};
+         int level;
+         sstream >> level;
+
+         // Checks for invalid level inputs!
+         if (sstream.fail()) {
+            std::cerr << "Provided level is NOT an Integer!" << std::endl;
+            return 1;
+         } else if (level < 0 || level > 4) {
+            std::cerr << "Provided integer level is NOT VALID!" << std::endl;
+            return 1;
+         }
+
+         std::cout << "Set Level: " << level << std::endl; 
+         player1->setInitialLevelNum(level);
+         player2->setInitialLevelNum(level);
+         cmdIndex++;
+         continue;
+      } else if(std::string(argv[cmdIndex]) == "-scriptfile1") {
+            if (cmdIndex + 1 == argc) {
+               std::cerr << "Scriptfile1 NOT Provided!" << std::endl;
+               return 1;
+            }
+
+            std::string scriptfile1 = argv[cmdIndex + 1];
+            std::cout << "Set Scriptfile1 " << scriptfile1 << std::endl; 
+            player1->setInitialSeqFile(scriptfile1);
+            cmdIndex++;
+            continue;
+      } else if(std::string(argv[cmdIndex]) == "-scriptfile2") {
+            if (cmdIndex + 1 == argc) {
+               std::cerr << "Scriptfile2 NOT Provided!" << std::endl;
+               return 1;
+            }
+
+            std::string scriptfile2 = argv[cmdIndex + 1];
+            std::cout << "Set Scriptfile2 " << scriptfile2 << std::endl; 
+            player1->setInitialSeqFile(scriptfile2);
+            cmdIndex++;
+            continue;
+      } else if (std::string(argv[cmdIndex]) == "-text") {
+         // Delete the graphical observers here...
+      } else {
+         std::cerr << "Unknown Argument Provided!" << std::endl;
+         return 1;
+      }
+   }
+
+   std::unique_ptr<Game> controller = std::make_unique<Game>(std::cin, player1, player2);
+   controller->startGame();
+   return 0;   
 }
